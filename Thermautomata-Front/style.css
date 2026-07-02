@@ -118,20 +118,43 @@ h1 {
     font-size: 1.75vw;
 }
 
-
 /* =======================================================
    LINKS
 ======================================================= */
 
 a {
     text-decoration: none;
+    color: white;
+}
+
+.ps-5 {
+    text-decoration: none;
     color: black;
     transition: color 0.4s ease-in-out;
 }
 
-a:hover {
+.ps-5:hover {
     color: #777777;
 }
+
+.social-media ion-icon {
+    font-size: 3vw;
+    margin-left: 1rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin: 1vw;
+    font-size: 1.1vw;
+}
+
+.social-links li:not(:last-child)::after {
+            content: "|";
+            margin-left: 5px; /* Espaço do lado direito do texto até a barra */
+            color: white
+        }
 
 
 /* =======================================================
@@ -300,4 +323,14 @@ body.nav-locked {
 
 .img-menor {
     width: 50%;
+}
+
+/* =======================================================
+   RODAPÉ
+======================================================= */
+
+.mt-3 {
+    text-align: justify;
+    font-size: 1.1vw;
+    margin: 1vw;
 }

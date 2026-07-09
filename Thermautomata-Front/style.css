@@ -359,10 +359,96 @@ body.nav-locked {
    ARTIGO PAGE
 ======================================================= */
 
-.artigo-titulo {
-    font-size: 14px;
+.sidebar-filtros{
+    padding-left:40px;
 }
 
-.artigo-texto {
-    font-size: 12px;
+.filtro-btn{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:120px;
+    background:none;
+    border:none;
+    font-size:14px;
+    font-weight:500;
+    padding:0;
+    margin-bottom:15px;
+}
+
+.icone-filtro{
+    width:18px;
+}
+
+.lista-filtros{
+    list-style:none;
+    padding:0;
+    margin:0;
+    font-size:14px;
+}
+
+.lista-filtros li{
+    margin-bottom:6px;
+}
+
+.artigo{
+    margin-bottom:50px;
+    max-width:560px;
+}
+
+.artigo-titulo{
+    font-size:15px;
+    font-weight:700;
+}
+
+.autor{
+    font-size:14px;
+    font-weight:500;
+    margin-top:8px;
+}
+
+.artigo-texto{
+    font-size:12px;
+    color:#555;
+}
+
+.salvar{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+}
+
+.salvar img{
+    width:15px;
+}
+
+.btn-criar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    width:140px;
+    height:60px;
+    background:white;
+    border:1px solid #555;
+    cursor:pointer;
+}
+
+.btn-criar span{
+    font-size:18px;
+    font-weight:400;
+}
+
+.btn-criar-icon{
+    width:22px;
+}
+
+.chevron{
+    transition: transform .50s ease;
+}
+
+/* Quando o collapse estiver aberto */
+.filtro-btn[aria-expanded="true"] .chevron{
+    transform: rotate(180deg);
 }

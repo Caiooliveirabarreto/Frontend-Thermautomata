@@ -23,12 +23,12 @@
                     <img src="assets/logo.png" alt="Logo" class="img-fluid">
                 </div>
                 <div class="col-5 align-items-center d-flex justify-content-center desktop-nav-links">
-                    <a href="index.html" class="ps-5" style="font-size: 1.5rem;">Sobre</a>
-                    <a href="artigos.html" class="ps-5" style="font-size: 1.5rem;">Artigos</a>
-                    <a href="download.html" class="ps-5" style="font-size: 1.5rem;">Download</a>
+                    <a href="index.html" class="ps-5">SOBRE</a>
+                    <a href="artigos.html" class="ps-5">ARTIGOS</a>
+                    <a href="download.html" class="ps-5">DOWNLOAD</a>
                 </div>
                 <div class="col-2 align-items-end justify-content-end d-flex" id="loginButtons">
-                    <a href="#" class="ps-5" style="font-size: 1.5rem;">Login</a>
+                    <a href="#" class="ps-5">Login</a>
                     <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menu" aria-expanded="false"
                         aria-controls="mobileNavPanel">
                         <span></span>
@@ -51,15 +51,32 @@
         <button class="login-btn-mobile">Login</button>
     </div>
 
+    <div class="filtro">
+        <p class="d-inline-flex gap-1">
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Filtro
+            </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <ul>
+                    <li>Filtro 1</li>
+                    <li>Filtro 2</li>
+                    <li>Filtro 3</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="row pb-5 pt-4">
         <div class="col-3">
 
         </div>
         <div class="col-4">
-            <h2 class="titulo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius, alias assumenda velit fugiat
+            <h2 class="artigo-titulo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius, alias assumenda velit fugiat
             </h2>
             <h3>AG. ABREVIARIO</h3>
-            <p>
+            <p class="artigo-texto">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda cumque dolorem, eveniet architecto
                 optio eligendi sapiente. Ipsum minima, quibusdam voluptatem ex qui repellendus nesciunt aliquid suscipit
                 perspiciatis! Dolorem, itaque eum.
@@ -83,11 +100,11 @@
     
         </div>
         <div class="col-4">
-            <h2 class="titulo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius, alias assumenda
+            <h2 class="artigo-titulo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius, alias assumenda
                 velit fugiat
             </h2>
             <h3>AG. ABREVIARIO</h3>
-            <p>
+            <p class="artigo-texto">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda cumque dolorem, eveniet architecto
                 optio eligendi sapiente. Ipsum minima, quibusdam voluptatem ex qui repellendus nesciunt aliquid suscipit
                 perspiciatis! Dolorem, itaque eum.
@@ -106,11 +123,11 @@
     
         </div>
         <div class="col-4">
-            <h2 class="titulo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius, alias assumenda
+            <h2 class="artigo-titulo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius, alias assumenda
                 velit fugiat
             </h2>
             <h3>AG. ABREVIARIO</h3>
-            <p>
+            <p class="artigo-texto">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda cumque dolorem, eveniet architecto
                 optio eligendi sapiente. Ipsum minima, quibusdam voluptatem ex qui repellendus nesciunt aliquid suscipit
                 perspiciatis! Dolorem, itaque eum.
@@ -129,11 +146,11 @@
     
         </div>
         <div class="col-4">
-            <h2 class="titulo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius, alias assumenda
+            <h2 class="artigo-titulo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius, alias assumenda
                 velit fugiat
             </h2>
             <h3>AG. ABREVIARIO</h3>
-            <p>
+            <p class="artigo-texto">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda cumque dolorem, eveniet architecto
                 optio eligendi sapiente. Ipsum minima, quibusdam voluptatem ex qui repellendus nesciunt aliquid suscipit
                 perspiciatis! Dolorem, itaque eum.
@@ -148,7 +165,7 @@
     </div>
     
 </body>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script src="script.js"></script>
 
 </html>

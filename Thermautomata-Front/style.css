@@ -114,9 +114,14 @@ h1 {
     margin-bottom: 1.5rem;
 }
 
-.titulo {
-    font-size: 1.75vw;
+h3 {
+    font-size: 14px;
 }
+
+h4 {
+    font-size: 12px;
+}
+
 
 /* =======================================================
    LINKS
@@ -131,6 +136,8 @@ a {
     text-decoration: none;
     color: black;
     transition: color 0.4s ease-in-out;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .ps-5:hover {
@@ -333,4 +340,29 @@ body.nav-locked {
     text-align: justify;
     font-size: 1.1vw;
     margin: 1vw;
+}
+
+/* =======================================================
+   DOWNLOAD
+======================================================= */
+
+.btn-download {
+    font-size: 1.5vw;
+    padding: 0.5vw 2vw;
+    margin-left: 20px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+
+/* =======================================================
+   ARTIGO PAGE
+======================================================= */
+
+.artigo-titulo {
+    font-size: 14px;
+}
+
+.artigo-texto {
+    font-size: 12px;
 }

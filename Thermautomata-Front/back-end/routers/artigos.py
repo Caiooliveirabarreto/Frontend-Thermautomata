@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
-from models import ArtigosDB, FontesDB, ArtigosFontesDB, TagsDB, ArtigosTagsDB
+from models import ArtigosDB, FontesDB, ArtigosFontesDB, TagsDB, ArtigosTagsDB, SalvosDB
 from schemas import ArtigoCreate, ArtigoResponse
 from auth_utils import get_usuario_atual
 
@@ -95,3 +95,80 @@ def excluir_artigo(
     return {
         "mensagem": "Artigo excluído com sucesso"
     }
+
+@router.post("/salvar/{idart}")
+def salvar_artigo(
+    idart: int,
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    artigo = db.query(ArtigosDB).filter(
+        ArtigosDB.idart == idart
+    ).first()
+
+    if not artigo:
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não encontrado"
+        )
+
+    salvo_existente = db.query(SalvosDB).filter(
+        SalvosDB.iduser == usuario.iduser,
+        SalvosDB.idart == idart
+    ).first()
+
+    if salvo_existente:
+        raise HTTPException(
+            status_code=400,
+            detail="Artigo já está salvo"
+        )
+
+    novo_salvo = SalvosDB(
+        iduser=usuario.iduser,
+        idart=idart
+    )
+
+    db.add(novo_salvo)
+    db.commit()
+
+    return {
+        "mensagem": "Artigo salvo com sucesso"
+    }
+
+@router.delete("/salvar/{idart}")
+def remover_artigo_salvo(
+    idart: int,
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    salvo = db.query(SalvosDB).filter(
+        SalvosDB.iduser == usuario.iduser,
+        SalvosDB.idart == idart
+    ).first()
+
+    if not salvo:
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não está salvo"
+        )
+
+    db.delete(salvo)
+    db.commit()
+
+    return {
+        "mensagem": "Artigo removido dos salvos"
+    }
+
+@router.get("/salvos", response_model=list[ArtigoResponse])
+def listar_artigos_salvos(
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    artigos = db.query(ArtigosDB).join(
+        SalvosDB,
+        SalvosDB.idart == ArtigosDB.idart
+    ).filter(
+        SalvosDB.iduser == usuario.iduser
+    ).all()
+
+    return artigos

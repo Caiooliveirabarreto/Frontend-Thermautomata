@@ -41,3 +41,8 @@ class ArtigosTagsDB(Base):
     __tablename__ = 'artigos_tags'
     idart = Column(Integer, ForeignKey("artigos.idart"), primary_key=True)
     idtag = Column(Integer, ForeignKey("tags.idtag"), primary_key=True)
+
+class SalvosDB(Base):
+    __tablename__ = 'salvos'
+    iduser = Column(Integer, ForeignKey("usuario.iduser"), primary_key=True)
+    idart = Column(Integer, ForeignKey("artigos.idart"), primary_key=True)

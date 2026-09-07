@@ -172,3 +172,63 @@ def listar_artigos_salvos(
     ).all()
 
     return artigos
+
+@router.put("/aprovar/{idart}")
+def aprovar_artigo(
+    idart: int,
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    if usuario.tipo != 1:
+        raise HTTPException(
+            status_code=403,
+            detail="Apenas administradores podem aprovar artigos"
+        )
+
+    artigo = db.query(ArtigosDB).filter(
+        ArtigosDB.idart == idart
+    ).first()
+
+    if not artigo:
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não encontrado"
+        )
+
+    artigo.status = "aprovado"
+
+    db.commit()
+
+    return {
+        "mensagem": "Artigo aprovado com sucesso"
+    }
+
+@router.put("/rejeitar/{idart}")
+def rejeitar_artigo(
+    idart: int,
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    if usuario.tipo != 1:
+        raise HTTPException(
+            status_code=403,
+            detail="Apenas administradores podem rejeitar artigos"
+        )
+
+    artigo = db.query(ArtigosDB).filter(
+        ArtigosDB.idart == idart
+    ).first()
+
+    if not artigo:
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não encontrado"
+        )
+
+    artigo.status = "rejeitado"
+
+    db.commit()
+
+    return {
+        "mensagem": "Artigo rejeitado com sucesso"
+    }

@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from database import get_db
-from models import ArtigosDB, FontesDB, ArtigosFontesDB, TagsDB, ArtigosTagsDB, SalvosDB
+from models import ArtigosDB, FontesDB, ArtigosFontesDB, TagsDB, ArtigosTagsDB, SalvosDB, UsuarioDB
 from schemas import ArtigoCreate, ArtigoResponse
 from auth_utils import get_usuario_atual
+from sqlalchemy import func
 
 router = APIRouter(
     prefix="/artigos",
@@ -232,3 +233,31 @@ def rejeitar_artigo(
     return {
         "mensagem": "Artigo rejeitado com sucesso"
     }
+
+@router.get("/", response_model=list[ArtigoResponse])
+def listar_artigos(
+    autor: str | None = None,
+    tags: list[int] | None = Query(None),
+    db: Session = Depends(get_db)
+):
+    consulta = db.query(ArtigosDB)
+
+    if autor:
+        consulta = consulta.join(
+            UsuarioDB,
+            UsuarioDB.iduser == ArtigosDB.iduser
+        ).filter(
+            UsuarioDB.nome == autor
+        )
+
+    if tags:
+        consulta = consulta.filter(
+            ArtigosDB.idart.in_(
+                db.query(ArtigosTagsDB.idart)
+                .filter(ArtigosTagsDB.idtag.in_(tags))
+                .group_by(ArtigosTagsDB.idart)
+                .having(func.count(ArtigosTagsDB.idtag) == len(tags))
+            )
+        )
+
+    return consulta.all()

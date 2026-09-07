@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from fastapi.security import HTTPBearer
 from database import get_db
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
 
@@ -16,7 +17,8 @@ security = HTTPBearer()
 
 
 def criar_token(id_usuario):
-    payload = {"sub": str(id_usuario)}
+    expiracao = datetime.utcnow() + timedelta(hours=12)  # Define a expiração do token para 12 horas
+    payload = {"sub": str(id_usuario), "exp": expiracao}
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
     return token
 

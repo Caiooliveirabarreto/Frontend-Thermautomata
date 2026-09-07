@@ -66,3 +66,32 @@ def criar_artigo(
     db.commit()
 
     return novo_artigo
+
+@router.delete("/deletar/{idart}")
+def excluir_artigo(
+    idart: int,
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    artigo = db.query(ArtigosDB).filter(
+        ArtigosDB.idart == idart
+    ).first()
+
+    if not artigo:
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não encontrado"
+        )
+
+    if artigo.iduser != usuario.iduser and usuario.tipo != 1:
+        raise HTTPException(
+            status_code=403,
+            detail="Você não tem permissão para excluir este artigo"
+        )
+
+    db.delete(artigo)
+    db.commit()
+
+    return {
+        "mensagem": "Artigo excluído com sucesso"
+    }

@@ -21,11 +21,62 @@
 
 <body>
 
+    <header>
+        <nav>
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <img src="assets/logo.png" alt="Logo" class="img-fluid">
+                </div>
+
+                <div class="col-5 align-items-center d-flex justify-content-center desktop-nav-links">
+                    <a href="index.html" class="ps-5">SOBRE</a>
+                    <a href="artigos.html" class="ps-5">ARTIGOS</a>
+                    <a href="download.html" class="ps-5">DOWNLOAD</a>
+                </div>
+
+                <div class="col-2 align-items-end justify-content-end d-flex" id="loginButtons">
+                    <a href="login.html" class="desktop-nav-links ps-5">LOGIN</a>
+
+                    <button class="hamburger-btn" id="hamburgerBtn"
+                        aria-label="Abrir menu"
+                        aria-expanded="false"
+                        aria-controls="mobileNavPanel">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </button>
+                </div>
+            </div>
+            <hr>
+        </nav>
+    </header>
+
+    <!-- Overlay e painel do menu sanduíche -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+    <div class="mobile-nav-panel" id="mobileNavPanel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu de navegação">
+
+        <button class="close-btn" id="closeNavBtn"
+            aria-label="Fechar menu">&times;</button>
+
+        <a href="index.html">Sobre</a>
+        <a href="artigos.html">Artigos</a>
+        <a href="download.html">Download</a>
+
+        <button class="login-btn-mobile">Login</button>
+
+    </div>
+
     <main class="container">
         <div id="artigoCompleto"></div>
     </main>
 
-
+    <script src="script.js"></script>
     <script>
         const parametros = new URLSearchParams(window.location.search);
         const idArtigo = parametros.get("id");

@@ -111,3 +111,103 @@ async function carregarArtigos() {
 if (document.getElementById("listaArtigos")) {
     carregarArtigos();
 }
+
+// Função para verificar se o usuário está logado
+async function verificarLogin() {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        return;
+    }
+
+    try {
+
+        const resposta = await fetch(
+            "http://127.0.0.1:8000/auth/me",
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!resposta.ok) {
+            localStorage.removeItem("token");
+            return;
+        }
+
+        const usuario = await resposta.json();
+
+        const loginButtons = document.getElementById("loginButtons");
+
+        if (!loginButtons) {
+            return;
+        }
+
+        loginButtons.innerHTML = `
+            <div class="perfil-menu">
+
+                <img src="http://127.0.0.1:8000/uploads/perfis/${usuario.foto_perfil}"
+                    alt="Foto de perfil"
+                    class="foto-perfil-nav"
+                    id="fotoPerfilNav">
+
+                <div class="perfil-dropdown" id="perfilDropdown">
+
+                    <button id="btnLogout">
+                        Sair
+                    </button>
+
+                </div>
+
+            </div>
+
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menu"
+                aria-expanded="false" aria-controls="mobileNavPanel">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+        `;
+
+        document.getElementById("fotoPerfilNav").addEventListener("click", function () {
+
+            const perfilDropdown = document.getElementById("perfilDropdown");
+
+            perfilDropdown.classList.toggle("aberto");
+
+        });
+
+        document.getElementById("btnLogout").addEventListener("click", function () {
+
+            localStorage.removeItem("token");
+
+            loginButtons.innerHTML = `
+                <a href="login.html" class="desktop-nav-links ps-5">
+                    LOGIN
+                </a>
+
+                <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menu"
+                    aria-expanded="false" aria-controls="mobileNavPanel">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </button>
+            `;
+
+        });
+
+    } catch (erro) {
+
+        console.error("Erro ao verificar login:", erro);
+
+    }
+
+}
+
+verificarLogin();

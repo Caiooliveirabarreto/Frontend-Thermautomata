@@ -24,7 +24,7 @@
             <button class="tab" onclick="window.location.href='cadastro.html'">Registrar</button>
         </div>
 
-        <form class="login-form" action="index.html" method="POST">
+        <form class="login-form" id="formLogin">
 
             <div class="mb-4">
                 <label class="form-label">E-mail</label>
@@ -34,6 +34,7 @@
 
                     <input
                         type="email"
+                        id="email"
                         class="form-control"
                         placeholder="seu@email.com" required>
                 </div>
@@ -47,6 +48,7 @@
 
                     <input
                         type="password"
+                        id="senha"
                         class="form-control"
                         placeholder="••••••••" required>
                 </div>
@@ -64,8 +66,44 @@
 
     <script>
         lucide.createIcons();
-    </script>
 
+        document.getElementById("formLogin").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const senha = document.getElementById("senha").value;
+
+            try {
+                const resposta = await fetch("http://127.0.0.1:8000/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        senha: senha
+                    })
+                });
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    alert(resultado.detail);
+                    return;
+                }
+
+                localStorage.setItem("token", resultado.token);
+
+                alert("Login realizado com sucesso!");
+
+                window.location.href = "index.html";
+
+            } catch (erro) {
+                console.error("Erro:", erro);
+                alert("Não foi possível conectar com a API.");
+            }
+        });
+    </script>
 </body>
 
 </html>

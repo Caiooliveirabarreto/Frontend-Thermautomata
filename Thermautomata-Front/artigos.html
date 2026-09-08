@@ -67,43 +67,27 @@
 
             <div class="collapse show filtros-conteudo" id="filtros">
 
-                <ul class="lista-filtros">
-                    <li>Geopolítica</li>
-                    <li>Política</li>
-                    <li>Automação</li>
-                    <li>Infraestrutura</li>
-                    <li>Sustentabilidade</li>
-                </ul>
-                <hr>
-                <ul class="lista-filtros">
-                    <li>Mais recentes</li>
-                    <li>Mais antigos</li>
-                    <li>Desde 2026</li>
-                    <li>Período específico</li>
-                    <li>Salvos</li>
+                <ul class="lista-filtros" id="filtroTags">
+                    <li data-tag-id="6">Política</li>
+                    <li data-tag-id="7">Economia</li>
+                    <li data-tag-id="8">Meio Ambiente</li>
+                    <li data-tag-id="9">Tecnologia</li>
+                    <li data-tag-id="10">Educação</li>
+                    <li data-tag-id="11">Saúde</li>
+                    <li data-tag-id="12">Urbanismo</li>
+                    <li data-tag-id="13">Sustentabilidade</li>
+                    <li data-tag-id="14">Sociedade</li>
+                    <li data-tag-id="15">Infraestrutura</li>
                 </ul>
 
             </div>
 
         </div>
+
         <div class="col-6">
-
-            <div class="artigos">
-                <h2 class="artigo-titulo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius, alias assumenda velit fugiat
-                </h2>
-                <h3 class="autor">AG. ABREVIARIO</h3>
-                <p class="artigo-texto">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda cumque dolorem, eveniet architecto
-                    optio eligendi sapiente. Ipsum minima, quibusdam voluptatem ex qui repellendus nesciunt aliquid suscipit
-                    perspiciatis! Dolorem, itaque eum.
-                </p>
-                <div class="salvar">
-                    <img src="assets/star-svgrepo-com.svg" alt="Estrela-Salvar" class="salvar-icon">
-                    <h4>Salvar</h4>
-                </div>
-            </div>
-
+            <div id="listaArtigos"></div>
         </div>
+        
         <div class="col-3 d-flex justify-content-center">
 
             <button class="btn-criar" onclick="window.location.href='criar.html'">

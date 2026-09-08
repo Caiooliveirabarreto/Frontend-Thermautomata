@@ -1,10 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Form, UploadFile, File
 from sqlalchemy.orm import Session
 from database import get_db
 from models import UsuarioDB
 from schemas import UsuarioCreate, UsuarioResponse, UsuarioLogin
 from pwdlib import PasswordHash
 from auth_utils import criar_token, get_usuario_atual
+from pathlib import Path
+import os
+import uuid
 
 password_hash = PasswordHash.recommended()
 
@@ -12,28 +15,75 @@ router = APIRouter(
     prefix="/auth",
     tags=["Autenticação"]
 )
+PASTA_FOTOS = Path("uploads/perfis")
+PASTA_FOTOS.mkdir(parents=True, exist_ok=True)
 
 # Endpoint para cadastro de usuário
 @router.post("/cadastro", response_model=UsuarioResponse)
-def cadastrar_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
+def cadastrar_usuario(
+    nome: str = Form(...),
+    email: str = Form(...),
+    senha: str = Form(...),
+    foto_perfil: UploadFile | None = File(None),
+    db: Session = Depends(get_db)
+):
+
     # Verifica se o email já está cadastrado
-    usuario_existente = db.query(UsuarioDB).filter(UsuarioDB.email == usuario.email).first()
+    usuario_existente = db.query(UsuarioDB).filter(
+        UsuarioDB.email == email
+    ).first()
+
     if usuario_existente:
-        raise HTTPException(status_code=400, detail="Email já cadastrado")
+        raise HTTPException(
+            status_code=400,
+            detail="Email já cadastrado"
+        )
+
+    usuario_nome_existente = db.query(UsuarioDB).filter(
+        UsuarioDB.nome == nome
+    ).first()
+
+    # Verifica se o nome de usuário já está sendo usado
+    if usuario_nome_existente:
+        raise HTTPException(
+            status_code=400,
+            detail="Este nome de usuário já está sendo usado."
+        )
+
+    nome_foto = "template-perfil.jpg"
+
+    if foto_perfil:
+        extensao = Path(foto_perfil.filename).suffix
+        nome_foto = f"{uuid.uuid4()}{extensao}"
+
+        caminho_foto = PASTA_FOTOS / nome_foto
+
+        with open(caminho_foto, "wb") as arquivo:
+            arquivo.write(foto_perfil.file.read())
 
     # Cria um novo usuário
     novo_usuario = UsuarioDB(
-        nome=usuario.nome,
-        email=usuario.email,
-        senha=password_hash.hash(usuario.senha),
-        tipo=0,  # Tipo padrão para usuário comum
-        foto_perfil=usuario.foto_perfil or "template-perfil.jpg"
+        nome=nome,
+        email=email,
+        senha=password_hash.hash(senha),
+        tipo=0,
+        foto_perfil=nome_foto
     )
+
     db.add(novo_usuario)
     db.commit()
     db.refresh(novo_usuario)
 
-    return novo_usuario
+    token = criar_token(novo_usuario.iduser)
+
+    return {
+        "iduser": novo_usuario.iduser,
+        "nome": novo_usuario.nome,
+        "email": novo_usuario.email,
+        "tipo": novo_usuario.tipo,
+        "foto_perfil": novo_usuario.foto_perfil,
+        "token": token
+    }
 
 # Endpoint para login de usuário
 @router.post("/login", response_model=UsuarioResponse)

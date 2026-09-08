@@ -24,7 +24,7 @@
             <button class="tab active">Registrar</button>
         </div>
 
-        <form class="login-form" action="index.html" method="POST">
+        <form class="login-form" id="formLogin" enctype="multipart/form-data">
 
             <label class="form-label">Foto de Perfil</label>
 
@@ -34,11 +34,8 @@
                     <img src="assets/template-perfil.jpg" alt="Perfil">
                 </div>
 
-                <input type="file" class="upload-btn">
-                    <i data-lucide="upload"></i>
-                    Escolher Foto
-            </input>
-
+                <input type="file" class="upload-btn" id="fotoPerfil">
+    
             </div>
 
             <div class="mb-4">
@@ -62,6 +59,7 @@
 
                     <input
                         type="email"
+                        id="email"
                         class="form-control"
                         placeholder="seu@email.com" required>
                 </div>
@@ -75,6 +73,7 @@
 
                     <input
                         type="password"
+                        id="senha"
                         class="form-control"
                         placeholder="Mínimo 6 caracteres" required>
                 </div>
@@ -94,9 +93,69 @@
     </div>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <script>
+
         lucide.createIcons();
+
+        document.getElementById("formLogin").addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            const nome = document.querySelector('input[type="text"]').value;
+            const email = document.getElementById("email").value;
+            const senha = document.getElementById("senha").value;
+            const foto = document.getElementById("fotoPerfil").files[0];
+            const dados = new FormData();
+
+            dados.append("nome", nome);
+            dados.append("email", email);
+            dados.append("senha", senha);
+
+            if (foto) {
+                dados.append("foto_perfil", foto);
+            }
+
+            try {
+
+                const resposta = await fetch("http://127.0.0.1:8000/auth/cadastro", {
+                    method: "POST",
+                    body: dados
+                });
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    alert(resultado.detail);
+                    return;
+                }
+
+                localStorage.setItem("token", resultado.token);
+                alert("Conta criada com sucesso!");
+                window.location.href = "index.html";
+
+            } catch (erro) {
+                console.error("Erro:", erro);
+                alert("Não foi possível conectar com a API.");
+            }
+
+        });
+
+    </script>
+    <script>
+        const fotoPerfil = document.getElementById("fotoPerfil");
+        const previewFoto = document.querySelector(".profile-avatar img");
+
+        fotoPerfil.addEventListener("change", function () {
+
+            const arquivo = fotoPerfil.files[0];
+
+            if (!arquivo) {
+                return;
+            }
+
+            previewFoto.src = URL.createObjectURL(arquivo);
+
+        });
     </script>
 
 </body>

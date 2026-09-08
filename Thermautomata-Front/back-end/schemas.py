@@ -8,7 +8,6 @@ class UsuarioBase(BaseModel):
 
 class UsuarioCreate(UsuarioBase):
     senha: str
-    foto_perfil: str | None = "template-perfil.jpg"
 
 class UsuarioResponse(UsuarioBase):
     iduser: int
@@ -39,6 +38,7 @@ class ArtigoResponse(BaseModel):
     titulo: str
     artigo: str
     iduser: int
+    nome_autor: str
     status: str
     data_criacao: datetime
     data_atualizacao: datetime

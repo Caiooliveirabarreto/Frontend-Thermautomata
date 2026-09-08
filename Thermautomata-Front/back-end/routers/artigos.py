@@ -57,16 +57,25 @@ def criar_artigo(
         )
         db.add(relacao)
 
-        for tag in tags_existentes:
-            relacao_tag = ArtigosTagsDB(
-                idart=novo_artigo.idart,
-                idtag=tag.idtag
-            )
-            db.add(relacao_tag)
+    for tag in tags_existentes:
+        relacao_tag = ArtigosTagsDB(
+            idart=novo_artigo.idart,
+            idtag=tag.idtag
+        )
+        db.add(relacao_tag)
             
     db.commit()
 
-    return novo_artigo
+    return {
+        "idart": novo_artigo.idart,
+        "titulo": novo_artigo.titulo,
+        "artigo": novo_artigo.artigo,
+        "iduser": novo_artigo.iduser,
+        "nome_autor": usuario.nome,
+        "status": novo_artigo.status,
+        "data_criacao": novo_artigo.data_criacao,
+        "data_atualizacao": novo_artigo.data_atualizacao
+    }
 
 @router.delete("/deletar/{idart}")
 def excluir_artigo(
@@ -165,14 +174,32 @@ def listar_artigos_salvos(
     db: Session = Depends(get_db),
     usuario=Depends(get_usuario_atual)
 ):
-    artigos = db.query(ArtigosDB).join(
+    resultados = db.query(
+        ArtigosDB,
+        UsuarioDB.nome.label("nome_autor")
+    ).join(
+        UsuarioDB,
+        UsuarioDB.iduser == ArtigosDB.iduser
+    ).join(
         SalvosDB,
         SalvosDB.idart == ArtigosDB.idart
     ).filter(
         SalvosDB.iduser == usuario.iduser
     ).all()
 
-    return artigos
+    return [
+        {
+            "idart": artigo.idart,
+            "titulo": artigo.titulo,
+            "artigo": artigo.artigo,
+            "iduser": artigo.iduser,
+            "nome_autor": nome_autor,
+            "status": artigo.status,
+            "data_criacao": artigo.data_criacao,
+            "data_atualizacao": artigo.data_atualizacao
+        }
+        for artigo, nome_autor in resultados
+    ]
 
 @router.put("/aprovar/{idart}")
 def aprovar_artigo(
@@ -240,13 +267,16 @@ def listar_artigos(
     tags: list[int] | None = Query(None),
     db: Session = Depends(get_db)
 ):
-    consulta = db.query(ArtigosDB)
+    consulta = db.query(
+        ArtigosDB,
+        UsuarioDB.nome.label("nome_autor")
+    ).join(
+        UsuarioDB,
+        UsuarioDB.iduser == ArtigosDB.iduser
+    )
 
     if autor:
-        consulta = consulta.join(
-            UsuarioDB,
-            UsuarioDB.iduser == ArtigosDB.iduser
-        ).filter(
+        consulta = consulta.filter(
             UsuarioDB.nome == autor
         )
 
@@ -260,4 +290,52 @@ def listar_artigos(
             )
         )
 
-    return consulta.all()
+    resultados = consulta.all()
+
+    return [
+        {
+            "idart": artigo.idart,
+            "titulo": artigo.titulo,
+            "artigo": artigo.artigo,
+            "iduser": artigo.iduser,
+            "nome_autor": nome_autor,
+            "status": artigo.status,
+            "data_criacao": artigo.data_criacao,
+            "data_atualizacao": artigo.data_atualizacao
+        }
+        for artigo, nome_autor in resultados
+    ]
+
+@router.get("/{idart}", response_model=ArtigoResponse)
+def buscar_artigo(
+    idart: int,
+    db: Session = Depends(get_db)
+):
+    resultado = db.query(
+        ArtigosDB,
+        UsuarioDB.nome.label("nome_autor")
+    ).join(
+        UsuarioDB,
+        UsuarioDB.iduser == ArtigosDB.iduser
+    ).filter(
+        ArtigosDB.idart == idart
+    ).first()
+
+    if not resultado:
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não encontrado"
+        )
+
+    artigo, nome_autor = resultado
+
+    return {
+        "idart": artigo.idart,
+        "titulo": artigo.titulo,
+        "artigo": artigo.artigo,
+        "iduser": artigo.iduser,
+        "nome_autor": nome_autor,
+        "status": artigo.status,
+        "data_criacao": artigo.data_criacao,
+        "data_atualizacao": artigo.data_atualizacao
+    }

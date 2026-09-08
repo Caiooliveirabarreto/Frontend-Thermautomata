@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <title>Artigo</title>
+</head>
+
+<body>
+
+    <main class="container">
+        <div id="artigoCompleto"></div>
+    </main>
+
+
+    <script>
+        const parametros = new URLSearchParams(window.location.search);
+        const idArtigo = parametros.get("id");
+
+        async function carregarArtigo() {
+            try {
+                const resposta = await fetch(
+                    `http://127.0.0.1:8000/artigos/${idArtigo}`
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Erro ao buscar artigo");
+                }
+
+                const artigo = await resposta.json();
+
+                document.getElementById("artigoCompleto").innerHTML = `
+                    <div class="cabecalho-artigo">
+                        <div>
+                            <h1>${artigo.titulo}</h1>
+                            <h3>${artigo.nome_autor}</h3>
+                            <p>${new Date(artigo.data_criacao).toLocaleDateString("pt-BR")}</p>
+                        </div>
+
+                        <button id="btnSalvar" class="btn-salvar">
+                            <span class="estrela">☆</span>
+                            <span class="texto-salvar">Salvar</span>
+                        </button>
+                    </div>
+
+                    <div class="conteudo-artigo">
+                        <p>${artigo.artigo}</p>
+                    </div>
+                `;
+
+                document.getElementById("btnSalvar").addEventListener("click", async function () {
+                    try {
+                        const token = localStorage.getItem("token");
+
+                        if (!token) {
+                            alert("Você precisa estar logado para salvar um artigo.");
+                            return;
+                        }
+
+                        const botao = document.getElementById("btnSalvar");
+
+                        const estaSalvo = botao.querySelector(".estrela").textContent === "★";
+
+                        const resposta = await fetch(
+                            `http://127.0.0.1:8000/artigos/salvar/${idArtigo}`,
+                            {
+                                method: estaSalvo ? "DELETE" : "POST",
+                                headers: {
+                                    "Authorization": `Bearer ${token}`
+                                }
+                            }
+                        );
+
+                        const resultado = await resposta.json();
+
+                        if (!resposta.ok) {
+                            alert(resultado.detail);
+                            return;
+                        }
+
+                        if (estaSalvo) {
+                            botao.innerHTML = `
+                                <span class="estrela">☆</span>
+                                <span class="texto-salvar">Salvar</span>
+                            `;
+
+                            alert("Artigo removido dos salvos!");
+                        } else {
+                            botao.innerHTML = `
+                                <span class="estrela">★</span>
+                                <span class="texto-salvar"><strong>Salvo</strong></span>
+                            `;
+
+                            alert("Artigo salvo com sucesso!");
+                        }
+
+                    } catch (erro) {
+                        console.error("Erro ao alterar artigo salvo:", erro);
+                    }
+                });
+                async function verificarSeEstaSalvo() {
+                    const token = localStorage.getItem("token");
+
+                    if (!token) {
+                        return;
+                    }
+
+                    try {
+                        const resposta = await fetch(
+                            "http://127.0.0.1:8000/artigos/salvos",
+                            {
+                                headers: {
+                                    "Authorization": `Bearer ${token}`
+                                }
+                            }
+                        );
+
+                        if (!resposta.ok) {
+                            return;
+                        }
+
+                        const artigosSalvos = await resposta.json();
+
+                        const estaSalvo = artigosSalvos.some(function (artigo) {
+                            return artigo.idart === Number(idArtigo);
+                        });
+
+                        if (estaSalvo) {
+                            document.getElementById("btnSalvar").innerHTML = `
+                                <span class="estrela">★</span>
+                                <span class="texto-salvar"><strong>Salvo</strong></span>
+                            `;
+                        }
+
+                    } catch (erro) {
+                        console.error("Erro ao verificar artigo salvo:", erro);
+                    }
+                }
+
+                verificarSeEstaSalvo();
+
+            } catch (erro) {
+                console.error("Erro:", erro);
+            }
+        }
+
+        carregarArtigo();
+    </script>
+
+</body>
+
+</html>

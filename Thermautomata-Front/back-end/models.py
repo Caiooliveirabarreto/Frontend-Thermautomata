@@ -5,7 +5,7 @@ from sqlalchemy import func, ForeignKey
 class UsuarioDB(Base):
     __tablename__ = 'usuario'
     iduser = Column(Integer, primary_key=True, index=True)
-    nome = Column(String(50), nullable=False)
+    nome = Column(String(50), nullable=False, unique=True)
     email = Column(String(255), nullable=False, unique=True)
     senha = Column(String(255), nullable=False)
     tipo = Column(Integer, nullable=False)  # 0 para usuário comum, 1 para administrador

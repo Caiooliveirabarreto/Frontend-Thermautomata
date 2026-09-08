@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/09/2026 às 13:45
+-- Tempo de geração: 08/09/2026 às 05:23
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -44,12 +44,13 @@ CREATE TABLE `artigos` (
 --
 
 INSERT INTO `artigos` (`idart`, `titulo`, `artigo`, `iduser`, `status`, `data_criacao`, `data_atualizacao`) VALUES
-(4, 'Um artigo de Teste', 'esse é um artigo muito legal de teste', 2, 'pendente', '2026-09-07 07:13:25', '2026-09-07 07:13:25'),
-(8, 'Artigo testando tags', 'Esse artigo é para testar as tags e ver se está funcionando', 2, 'pendente', '2026-09-07 08:10:21', '2026-09-07 08:10:21'),
-(9, 'Artigo testando tags 2', 'Esse artigo é para testar as tags e ver se está funcionando', 2, 'pendente', '2026-09-07 08:11:44', '2026-09-07 08:11:44'),
+(4, 'Um artigo de Teste', 'esse é um artigo muito legal de teste', 2, 'aprovado', '2026-09-07 07:13:25', '2026-09-07 18:42:21'),
+(9, 'Artigo testando tags 2', 'Esse artigo é para testar as tags e ver se está funcionando', 2, 'rejeitado', '2026-09-07 08:11:44', '2026-09-07 18:45:56'),
 (10, 'Testando para saber se funciona as tags', 'tem que testar né ne né Estevão buxaa', 2, 'pendente', '2026-09-07 08:26:03', '2026-09-07 08:26:03'),
-(11, 'Outro teste para as tags', 'Testando', 2, 'pendente', '2026-09-07 08:33:48', '2026-09-07 08:33:48'),
-(12, 'Verificar se adiciona as tags no artigos_tags', 'Se funcionar, eu mereço uma coxinha', 2, 'pendente', '2026-09-07 08:37:20', '2026-09-07 08:37:20');
+(12, 'Verificar se adiciona as tags no artigos_tags', 'Se funcionar, eu mereço uma coxinha', 2, 'aprovado', '2026-09-07 08:37:20', '2026-09-07 20:54:33'),
+(13, 'Artigo gamer', 'Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem ', 3, 'pendente', '2026-09-07 20:00:24', '2026-09-07 20:00:24'),
+(16, 'Artigo gamerrrr', 'Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem eita eita eita', 3, 'aprovado', '2026-09-07 20:06:22', '2026-09-07 20:07:05'),
+(17, 'Muitas letras', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 3, 'aprovado', '2026-09-07 20:08:43', '2026-09-07 20:08:52');
 
 -- --------------------------------------------------------
 
@@ -67,10 +68,11 @@ CREATE TABLE `artigos_fontes` (
 --
 
 INSERT INTO `artigos_fontes` (`idart`, `idfont`) VALUES
-(8, 7),
 (10, 9),
-(11, 10),
-(12, 11);
+(12, 11),
+(13, 12),
+(16, 15),
+(17, 16);
 
 -- --------------------------------------------------------
 
@@ -90,7 +92,12 @@ CREATE TABLE `artigos_tags` (
 INSERT INTO `artigos_tags` (`idart`, `idtag`) VALUES
 (12, 6),
 (12, 9),
-(12, 13);
+(12, 13),
+(13, 7),
+(16, 7),
+(16, 13),
+(17, 7),
+(17, 13);
 
 -- --------------------------------------------------------
 
@@ -112,7 +119,10 @@ INSERT INTO `fontes` (`idfont`, `nome`, `link`) VALUES
 (7, 'Figma', 'figma.com'),
 (9, 'Lol', '67.com'),
 (10, 'Roblox', 'roblox.com'),
-(11, 'Localhost', 'localhost.com');
+(11, 'Localhost', 'localhost.com'),
+(12, 'Tiktok', 'tiktok.com'),
+(15, 'Google', 'https://www.google.com/'),
+(16, 'Figma', 'https://www.figma.com/');
 
 -- --------------------------------------------------------
 
@@ -124,6 +134,17 @@ CREATE TABLE `salvos` (
   `iduser` int(11) NOT NULL,
   `idart` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `salvos`
+--
+
+INSERT INTO `salvos` (`iduser`, `idart`) VALUES
+(2, 4),
+(2, 12),
+(3, 4),
+(3, 16),
+(3, 17);
 
 -- --------------------------------------------------------
 
@@ -172,7 +193,13 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`iduser`, `nome`, `email`, `senha`, `tipo`, `foto_perfil`) VALUES
-(2, 'Suzuki', 'suzuki@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$7Nwo7lC/yuwUUz0NK5h99w$OJgqJlbETXdWfft5c5U0eNYpC+j45acwdlJVr2LvzAM', 0, 'template-perfil.jpg');
+(2, 'Suzuki', 'suzuki@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$7Nwo7lC/yuwUUz0NK5h99w$OJgqJlbETXdWfft5c5U0eNYpC+j45acwdlJVr2LvzAM', 0, 'template-perfil.jpg'),
+(3, 'Cometi', 'cometi@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$DB9rCgW7E8KFL/RoKNy8zQ$PX1yrim+AV4a+oE6DA5CzWsGsNMfl4uwO5GAw9qvXtU', 1, 'template-perfil.jpg'),
+(5, 'Tsu', 'tsuki@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$FaryylZDsg4H7xDJeG6kpg$oScY4mV7m6L0dTlnrCDMaGtHewdd8mwKxidJqQCU0H8', 0, 'template-perfil.jpg'),
+(6, 'Tsuki', 'tsukii@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$uKRGWY1N5EUhMvHoC12d9w$wpkssGG99lv2GOha+pNjhWTNvxVKmjDEz5wV3OgzQ/c', 0, 'template-perfil.jpg'),
+(8, 'Suzukax', 'suzukax@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$zqmduqoE4qheVTLyX9R4Bw$/XeeUCSlW5pZzmND4WF0oV5zBiHI8nL6f/i3DgBT78s', 0, 'template-perfil.jpg'),
+(9, 'Arthur', 'arthur@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$LjhcBQqnW8rQNFcG5vOLTQ$wO6GJ2IaFC406SA9VVDSYSDhm+03y0WKmrgOrkgVcPE', 0, '05d20b0e-2a2a-4459-9fa0-8598f831a142.jpg'),
+(10, 'Yukimiya', 'yukimiya@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$VFnnShYHQUZ5p5GK3eOCDQ$CVESIBI3SJ8xZZeNFFLMnA0BeBJnwQe6mwZYTh77Bj4', 0, '51232554-7bac-4bc3-9743-d3e3bfc1346f.jpg');
 
 --
 -- Índices para tabelas despejadas
@@ -225,7 +252,8 @@ ALTER TABLE `tags`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`iduser`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `uq_usuario_nome` (`nome`);
 
 --
 -- AUTO_INCREMENT para tabelas despejadas
@@ -235,13 +263,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `artigos`
 --
 ALTER TABLE `artigos`
-  MODIFY `idart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de tabela `fontes`
 --
 ALTER TABLE `fontes`
-  MODIFY `idfont` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idfont` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de tabela `tags`
@@ -253,7 +281,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restrições para tabelas despejadas

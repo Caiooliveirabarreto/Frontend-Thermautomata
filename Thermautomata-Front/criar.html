@@ -169,6 +169,43 @@
         });
     </script>
     <script>
+        async function verificarAcessoCriar() {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                alert("Você precisa estar logado para escrever um artigo");
+                window.location.href = "artigos.html";
+                return false;
+            }
+
+            try {
+                const resposta = await fetch(
+                    "http://127.0.0.1:8000/auth/me",
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+
+                if (!resposta.ok) {
+                    localStorage.removeItem("token");
+                    alert("Você precisa estar logado para escrever um artigo");
+                    window.location.href = "artigos.html";
+                    return false;
+                }
+
+                return true;
+
+            } catch (erro) {
+                console.error("Erro ao verificar login:", erro);
+                alert("Não foi possível verificar seu login.");
+                window.location.href = "artigos.html";
+                return false;
+            }
+        }
+
+        verificarAcessoCriar();
         document.getElementById("formCriarArtigo").addEventListener("submit", async function (event) {
 
             event.preventDefault();

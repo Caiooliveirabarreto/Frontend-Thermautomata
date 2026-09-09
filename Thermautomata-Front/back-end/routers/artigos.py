@@ -308,7 +308,7 @@ def listar_artigos(
 
     if autor:
         consulta = consulta.filter(
-            UsuarioDB.nome == autor
+            UsuarioDB.nome.ilike(f"%{autor}%")
         )
 
     if tags:

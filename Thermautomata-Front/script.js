@@ -63,7 +63,7 @@ if (filtroTags) {
             return Number(tag.dataset.tagId);
         });
 
-        localStorage.setItem("filtrosArtigos", JSON.stringify(tagsSelecionadas));
+        sessionStorage.setItem("filtrosArtigos", JSON.stringify(tagsSelecionadas));
 
         carregarArtigos(tagsSelecionadas);
 
@@ -72,20 +72,26 @@ if (filtroTags) {
 }
 
 // Função para carregar artigos do backend
-async function carregarArtigos(tagsSelecionadas = []) {
+async function carregarArtigos(tagsSelecionadas = [], autor = "") {
 
     try {
 
         let url = "http://127.0.0.1:8000/artigos/";
 
-        if (tagsSelecionadas.length > 0) {
-            const parametros = tagsSelecionadas
-                .map(function (id) {
-                    return `tags=${id}`;
-                })
-                .join("&");
+        const parametros = [];
 
-            url += "?" + parametros;
+        if (autor.trim() !== "") {
+            parametros.push(
+                `autor=${encodeURIComponent(autor.trim())}`
+            );
+        }
+
+        tagsSelecionadas.forEach(function (id) {
+            parametros.push(`tags=${id}`);
+        });
+
+        if (parametros.length > 0) {
+            url += "?" + parametros.join("&");
         }
 
         const resposta = await fetch(url);
@@ -95,7 +101,6 @@ async function carregarArtigos(tagsSelecionadas = []) {
         }
 
         const artigos = await resposta.json();
-
         const listaArtigos = document.getElementById("listaArtigos");
 
         listaArtigos.innerHTML = "";
@@ -105,17 +110,19 @@ async function carregarArtigos(tagsSelecionadas = []) {
         });
 
         artigosAprovados.forEach(function (artigo) {
-
             const elemento = document.createElement("div");
 
             elemento.classList.add("artigos");
-
             elemento.innerHTML = `
-                <h2 class="artigo-titulo" style="cursor: pointer;" onclick="window.location.href='artigo.html?id=${artigo.idart}'">
+                <h2 class="artigo-titulo"
+                    style="cursor: pointer;"
+                    onclick="window.location.href='artigo.html?id=${artigo.idart}'">
                     ${artigo.titulo}
                 </h2>
 
-                <h3 class="autor">${artigo.nome_autor}</h3>
+                <h3 class="autor">
+                    ${artigo.nome_autor}
+                </h3>
 
                 <p class="data-artigo">
                     ${new Date(artigo.data_criacao).toLocaleDateString("pt-BR")}
@@ -129,21 +136,18 @@ async function carregarArtigos(tagsSelecionadas = []) {
                     }
                 </p>
             `;
-
             listaArtigos.appendChild(elemento);
         });
 
     } catch (erro) {
-
         console.error("Erro:", erro);
-
     }
 }
 
 if (document.getElementById("listaArtigos")) {
 
     const filtrosSalvos = JSON.parse(
-        localStorage.getItem("filtrosArtigos") || "[]"
+        sessionStorage.getItem("filtrosArtigos") || "[]"
     );
 
     filtrosSalvos.forEach(function (idTag) {
@@ -157,6 +161,21 @@ if (document.getElementById("listaArtigos")) {
     });
 
     carregarArtigos(filtrosSalvos);
+}
+
+const filtroAutor = document.getElementById("filtroAutor");
+
+if (filtroAutor) {
+    filtroAutor.addEventListener("input", function () {
+        const autor = filtroAutor.value;
+        const tagsSelecionadas = Array.from(
+            filtroTags.querySelectorAll("li.selecionada")
+        ).map(function (tag) {
+            return Number(tag.dataset.tagId);
+        });
+
+        carregarArtigos(tagsSelecionadas, autor);
+    });
 }
 
 // Função para verificar se o usuário está logado
@@ -201,15 +220,19 @@ async function verificarLogin() {
                     id="fotoPerfilNav">
 
                 <div class="perfil-dropdown" id="perfilDropdown">
-
                     <button id="btnMeusArtigos">
                         Meus artigos
                     </button>
 
+                    ${usuario.tipo === 1 ? `
+                        <button id="btnPainelAdmin">
+                            Painel administrativo
+                        </button>
+                    ` : ""}
+
                     <button id="btnLogout">
                         Sair
                     </button>
-
                 </div>
 
             </div>
@@ -235,8 +258,16 @@ async function verificarLogin() {
             window.location.href = "meus-artigos.html";
         });
 
+        // Redirecionar para a página "Painel Administrativo" se o usuário for administrador
+        if (usuario.tipo === 1) {
+            document.getElementById("btnPainelAdmin").addEventListener("click", function () {
+                window.location.href = "admin.html";
+            });
+        }
+
         // Logout
         document.getElementById("btnLogout").addEventListener("click", function () {
+            sessionStorage.removeItem("filtrosArtigos");
             localStorage.removeItem("token");
             window.location.href = "index.html";
         });
@@ -248,3 +279,20 @@ async function verificarLogin() {
 }
 
 verificarLogin();
+
+// Botão "Criar Artigo" não redireciona para a página de criação se o usuário não estiver logado
+const btnCriarArtigo = document.getElementById("btnCriarArtigo");
+
+if (btnCriarArtigo) {
+    btnCriarArtigo.addEventListener("click", function () {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            alert("Você precisa estar logado para escrever um artigo");
+            return;
+        }
+
+        window.location.href = "criar.html";
+    });
+}

@@ -67,6 +67,16 @@
             </button>
 
             <div class="collapse show filtros-conteudo" id="filtros">
+                
+                <div class="filtro-autor">
+                    <label for="filtroAutor">Autor</label>
+                    <input
+                        type="text"
+                        id="filtroAutor"
+                        placeholder="Digite o nome do autor..."
+                        autocomplete="off"
+                    >
+                </div>
 
                 <ul class="lista-filtros" id="filtroTags">
                     <li data-tag-id="6">Política</li>
@@ -91,7 +101,7 @@
         
         <div class="col-3 d-flex justify-content-center">
 
-            <button class="btn-criar" onclick="window.location.href='criar.html'">
+            <button class="btn-criar" id="btnCriarArtigo">
                 <img src="assets/plus-large-svgrepo-com.svg" class="btn-criar-icon">
                 <span>Criar</span>
             </button>

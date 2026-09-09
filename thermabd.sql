@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 09/09/2026 às 12:38
--- Versão do servidor: 10.4.28-MariaDB
--- Versão do PHP: 8.2.4
+-- Tempo de geração: 10/09/2026 às 01:44
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,16 +46,13 @@ INSERT INTO `artigos` (`idart`, `titulo`, `artigo`, `iduser`, `status`, `data_cr
 (4, 'Um artigo de Teste', 'esse é um artigo muito legal de teste', 2, 'aprovado', '2026-09-07 07:13:25'),
 (9, 'Artigo testando tags 2', 'Esse artigo é para testar as tags e ver se está funcionando', 2, 'rejeitado', '2026-09-07 08:11:44'),
 (10, 'Testando para saber se funciona as tags', 'tem que testar né ne né Estevão buxaa', 2, 'aprovado', '2026-09-07 08:26:03'),
-(12, 'Verificar se adiciona as tags no artigos_tags', 'Se funcionar, eu mereço uma coxinha', 2, 'aprovado', '2026-09-07 08:37:20'),
 (13, 'Artigo gamer', 'Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem ', 3, 'pendente', '2026-09-07 20:00:24'),
 (16, 'Artigo gamerrrr', 'Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem eita eita eita', 3, 'aprovado', '2026-09-07 20:06:22'),
 (17, 'Muitas letras', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 3, 'aprovado', '2026-09-07 20:08:43'),
-(19, 'Outro artigo de teste', 'artigo diferenciado pra ver alguma coisa aí, sabe?', 2, 'rejeitado', '2026-09-08 18:57:45'),
 (20, 'Outro artigo de teste', 'artigo diferenciado pra ver alguma coisa aí, sabe?', 2, 'pendente', '2026-09-08 19:23:33'),
 (21, 'Outro artigo de teste222', 'artigo diferenciado pra ver alguma coisa aí, sabe?2222222', 2, 'pendente', '2026-09-08 19:24:57'),
 (22, 'Outro artigo de teste333', 'artigo diferenciado pra ver alguma coisa aí, sabe333333', 2, 'pendente', '2026-09-08 19:28:29'),
 (23, 'Outro artigo de teste333', 'artigo diferenciado pra ver alguma coisa aí, sabe333333', 2, 'pendente', '2026-09-08 19:34:14'),
-(24, 'Meu artigo', 'Conteúdo...', 2, 'pendente', '2026-09-08 19:37:57'),
 (25, 'Meu artigo', 'Conteúdo...', 2, 'pendente', '2026-09-08 19:39:08'),
 (26, 'Teste frontend', 'Artigo vindo direto do front', 2, 'aprovado', '2026-09-08 20:06:22');
 
@@ -77,15 +74,11 @@ CREATE TABLE `artigos_fontes` (
 
 INSERT INTO `artigos_fontes` (`idart`, `idfont`, `nome`) VALUES
 (10, 9, 'Lol'),
-(12, 11, 'Localhost'),
 (13, 12, 'Tiktok'),
 (16, 15, 'Google'),
 (17, 16, 'Figma'),
 (20, 18, 'Que'),
 (23, 18, 'Que3333'),
-(24, 18, 'Figma'),
-(24, 19, 'Documentação oficial'),
-(24, 20, 'Google'),
 (25, 18, 'Figma'),
 (25, 19, 'Documentação oficial'),
 (25, 20, 'Google'),
@@ -107,18 +100,11 @@ CREATE TABLE `artigos_tags` (
 --
 
 INSERT INTO `artigos_tags` (`idart`, `idtag`) VALUES
-(12, 6),
-(12, 9),
-(12, 13),
 (13, 7),
 (16, 7),
 (16, 13),
 (17, 7),
 (17, 13),
-(19, 6),
-(19, 7),
-(19, 9),
-(19, 13),
 (20, 6),
 (20, 7),
 (20, 9),
@@ -132,8 +118,6 @@ INSERT INTO `artigos_tags` (`idart`, `idtag`) VALUES
 (23, 6),
 (23, 7),
 (23, 9),
-(24, 9),
-(24, 13),
 (25, 9),
 (25, 13),
 (26, 9),
@@ -182,7 +166,6 @@ CREATE TABLE `salvos` (
 
 INSERT INTO `salvos` (`iduser`, `idart`) VALUES
 (2, 4),
-(2, 12),
 (2, 26),
 (3, 4),
 (3, 16),

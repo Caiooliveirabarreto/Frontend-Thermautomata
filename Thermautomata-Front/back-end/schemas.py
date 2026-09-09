@@ -41,7 +41,6 @@ class ArtigoResponse(BaseModel):
     nome_autor: str
     status: str
     data_criacao: datetime
-    data_atualizacao: datetime
 
     model_config = {
         "from_attributes": True

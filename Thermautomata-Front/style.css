@@ -158,11 +158,20 @@ h4 {
 }
 
 .perfil-dropdown button {
+    display: block;
+    width: 100%;
     border: none;
     background: none;
-    padding: 8px 20px;
+    padding: 9px 20px;
     cursor: pointer;
     font-family: "Poppins", sans-serif;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.perfil-dropdown button:hover {
+    background-color: #f2f2f2;
+    border-radius: 5px;
 }
 
 
@@ -504,6 +513,21 @@ body.nav-locked {
     font-weight: bold;
 }
 
+.btn-voltar-artigos {
+    border: none;
+    background: none;
+    padding: 0;
+    margin-bottom: 25px;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+}
+
+.btn-voltar-artigos:hover {
+    color: #000;
+}
+
 /* =======================================================
    CRIAR ARTIGO PAGE
 ======================================================= */
@@ -684,6 +708,225 @@ label{
     color: #000;
 }
 
+/* =========================
+   PAINEL ADMINISTRATIVO
+========================= */
+
+.admin-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 25px;
+}
+
+.admin-cabecalho h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.admin-cabecalho p {
+    margin: 8px 0 0;
+    color: #777;
+    font-size: 15px;
+}
+
+.admin-contador {
+    min-width: 90px;
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #f8f8f8;
+}
+
+.admin-contador span {
+    display: block;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.admin-contador small {
+    color: #777;
+    font-size: 12px;
+}
+
+.admin-divisor {
+    margin: 0 0 30px;
+    border-color: #ddd;
+}
+
+.titulo-pendentes {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+
+/* =========================
+   LISTA DE ARTIGOS
+========================= */
+
+#listaPendentes {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.artigo-pendente {
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    transition: 0.2s;
+}
+
+.artigo-pendente:hover {
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.09);
+}
+
+.artigo-pendente h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.artigo-pendente h3 {
+    margin: 0 0 18px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #777;
+}
+
+.artigo-pendente .conteudo-preview {
+    margin: 0;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.artigo-pendente .data-artigo-admin {
+    margin: 15px 0 0;
+    color: #999;
+    font-size: 12px;
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+.acoes-artigo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #eee;
+}
+
+.acoes-artigo button {
+    padding: 9px 18px;
+    border: none;
+    border-radius: 6px;
+    font-family: "Poppins", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-visualizar {
+    background-color: #eee;
+    color: #222;
+}
+
+.btn-visualizar:hover {
+    background-color: #ddd;
+}
+
+.btn-aprovar {
+    background-color: #222;
+    color: white;
+}
+
+.btn-aprovar:hover {
+    background-color: #444;
+}
+
+.btn-rejeitar {
+    background-color: #eee;
+    color: #555;
+}
+
+.btn-rejeitar:hover {
+    background-color: #ccc;
+}
+
+
+/* =========================
+   SEM ARTIGOS
+========================= */
+
+.lista-vazia {
+    padding: 40px;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+    text-align: center;
+    color: #888;
+    background-color: #fafafa;
+}
+
+/* =========================
+   AÇÕES DO ARTIGO
+========================= */
+
+.acoes-artigo {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.acoes-artigo button {
+    padding: 9px 18px;
+    border: none;
+    border-radius: 6px;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-visualizar {
+    background-color: #eee;
+    color: #222;
+}
+
+.btn-visualizar:hover {
+    background-color: #ddd;
+}
+
+.btn-aprovar {
+    background-color: #222;
+    color: white;
+}
+
+.btn-aprovar:hover {
+    background-color: #444;
+}
+
+.btn-rejeitar {
+    background-color: #ddd;
+    color: #222;
+}
+
+.btn-rejeitar:hover {
+    background-color: #bbb;
+}
+
 /* =======================================================
    LOGIN
 ======================================================= */
@@ -859,4 +1102,115 @@ label{
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+/* =========================
+   MEUS ARTIGOS
+========================= */
+
+.meus-artigos-cabecalho h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.meus-artigos-cabecalho p {
+    margin: 8px 0 0;
+    color: #777;
+    font-size: 15px;
+}
+
+#listaMeusArtigos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.meu-artigo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 20px 25px;
+
+    border: 1px solid #ddd;
+    border-radius: 12px;
+
+    background-color: white;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+
+    transition: 0.2s;
+}
+
+.meu-artigo:hover {
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.09);
+}
+
+.meu-artigo-conteudo h2 {
+    margin: 0 0 6px;
+
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.meu-artigo-data {
+    margin: 0;
+
+    color: #999;
+    font-size: 12px;
+}
+
+.meu-artigo-acoes {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.status-artigo {
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    text-transform: uppercase;
+}
+
+.status-aprovado {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-pendente {
+    background-color: #fff8e1;
+    color: #f57f17;
+}
+
+.status-rejeitado {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.meu-artigo-acoes .btn-visualizar {
+    padding: 8px 15px;
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #eee;
+    color: #222;
+
+    font-family: "Poppins", sans-serif;
+    font-size: 11px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.meu-artigo-acoes .btn-visualizar:hover {
+    background-color: #ddd;
 }

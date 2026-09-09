@@ -11,6 +11,7 @@ router = APIRouter(
     tags=["Artigos"]
 )
 
+# Rota para criar um novo artigo
 @router.post("/criar", response_model=ArtigoResponse)
 def criar_artigo(
     artigo: ArtigoCreate,
@@ -84,9 +85,9 @@ def criar_artigo(
         "nome_autor": usuario.nome,
         "status": novo_artigo.status,
         "data_criacao": novo_artigo.data_criacao,
-        "data_atualizacao": novo_artigo.data_atualizacao
     }
 
+# Rota para excluir um artigo
 @router.delete("/deletar/{idart}")
 def excluir_artigo(
     idart: int,
@@ -116,6 +117,7 @@ def excluir_artigo(
         "mensagem": "Artigo excluído com sucesso"
     }
 
+# Rota para salvar um artigo
 @router.post("/salvar/{idart}")
 def salvar_artigo(
     idart: int,
@@ -155,6 +157,7 @@ def salvar_artigo(
         "mensagem": "Artigo salvo com sucesso"
     }
 
+# Rota para remover um artigo salvo
 @router.delete("/salvar/{idart}")
 def remover_artigo_salvo(
     idart: int,
@@ -179,6 +182,7 @@ def remover_artigo_salvo(
         "mensagem": "Artigo removido dos salvos"
     }
 
+# Rota para listar artigos salvos por um usuário
 @router.get("/salvos", response_model=list[ArtigoResponse])
 def listar_artigos_salvos(
     db: Session = Depends(get_db),
@@ -206,11 +210,11 @@ def listar_artigos_salvos(
             "nome_autor": nome_autor,
             "status": artigo.status,
             "data_criacao": artigo.data_criacao,
-            "data_atualizacao": artigo.data_atualizacao
         }
         for artigo, nome_autor in resultados
     ]
 
+# Rota para aprovar um artigo
 @router.put("/aprovar/{idart}")
 def aprovar_artigo(
     idart: int,
@@ -241,6 +245,7 @@ def aprovar_artigo(
         "mensagem": "Artigo aprovado com sucesso"
     }
 
+# Rota para rejeitar um artigo
 @router.put("/rejeitar/{idart}")
 def rejeitar_artigo(
     idart: int,
@@ -271,6 +276,7 @@ def rejeitar_artigo(
         "mensagem": "Artigo rejeitado com sucesso"
     }
 
+# Rota para listar todas as tags
 @router.get("/tags")
 def listar_tags(
     db: Session = Depends(get_db)
@@ -285,6 +291,7 @@ def listar_tags(
         for tag in tags
     ]
 
+# Rota para listar artigos com filtros opcionais
 @router.get("/", response_model=list[ArtigoResponse])
 def listar_artigos(
     autor: str | None = None,
@@ -325,11 +332,75 @@ def listar_artigos(
             "nome_autor": nome_autor,
             "status": artigo.status,
             "data_criacao": artigo.data_criacao,
-            "data_atualizacao": artigo.data_atualizacao
         }
         for artigo, nome_autor in resultados
     ]
 
+# Rota para listar artigos pendentes
+@router.get("/pendentes")
+def listar_artigos_pendentes(
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    if usuario.tipo != 1:
+        raise HTTPException(
+            status_code=403,
+            detail="Acesso permitido apenas para administradores"
+        )
+
+    resultados = db.query(
+        ArtigosDB,
+        UsuarioDB.nome.label("nome_autor")
+    ).join(
+        UsuarioDB,
+        UsuarioDB.iduser == ArtigosDB.iduser
+    ).filter(
+        ArtigosDB.status == "pendente"
+    ).all()
+
+    return [
+        {
+            "idart": artigo.idart,
+            "titulo": artigo.titulo,
+            "artigo": artigo.artigo,
+            "iduser": artigo.iduser,
+            "nome_autor": nome_autor,
+            "status": artigo.status,
+            "data_criacao": artigo.data_criacao,
+        }
+        for artigo, nome_autor in resultados
+    ]
+
+# Rota para listar artigos de um usuário específico
+@router.get("/meus")
+def listar_meus_artigos(
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    resultados = db.query(
+        ArtigosDB,
+        UsuarioDB.nome.label("nome_autor")
+    ).join(
+        UsuarioDB,
+        UsuarioDB.iduser == ArtigosDB.iduser
+    ).filter(
+        ArtigosDB.iduser == usuario.iduser
+    ).all()
+
+    return [
+        {
+            "idart": artigo.idart,
+            "titulo": artigo.titulo,
+            "artigo": artigo.artigo,
+            "iduser": artigo.iduser,
+            "nome_autor": nome_autor,
+            "status": artigo.status,
+            "data_criacao": artigo.data_criacao,
+        }
+        for artigo, nome_autor in resultados
+    ]
+
+# Rota para buscar detalhes de um artigo específico
 @router.get("/{idart}/detalhes")
 def buscar_detalhes_artigo(
     idart: int,
@@ -381,7 +452,6 @@ def buscar_detalhes_artigo(
         "nome_autor": nome_autor,
         "status": artigo.status,
         "data_criacao": artigo.data_criacao,
-        "data_atualizacao": artigo.data_atualizacao,
 
         "fontes": [
             {
@@ -400,6 +470,7 @@ def buscar_detalhes_artigo(
         ]
     }
 
+# Rota para buscar um artigo específico
 @router.get("/{idart}", response_model=ArtigoResponse)
 def buscar_artigo(
     idart: int,
@@ -431,5 +502,4 @@ def buscar_artigo(
         "nome_autor": nome_autor,
         "status": artigo.status,
         "data_criacao": artigo.data_criacao,
-        "data_atualizacao": artigo.data_atualizacao
     }

@@ -19,7 +19,6 @@ class ArtigosDB(Base):
     iduser = Column(Integer, ForeignKey("usuario.iduser"), nullable=False)  # ID do usuário que criou o artigo
     status = Column(String(20), nullable=False, default="pendente")  # Status do artigo: pendente, aprovado, reprovado
     data_criacao = Column(DateTime, nullable=False, server_default=func.current_timestamp())  # Data de criação do artigo
-    data_atualizacao = Column(DateTime, nullable=True, server_default=func.current_timestamp(), onupdate=func.current_timestamp()) # Data de atualização do artigo
 
 class FontesDB(Base):
     __tablename__ = 'fontes'

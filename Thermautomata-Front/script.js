@@ -50,9 +50,7 @@
 const filtroTags = document.getElementById("filtroTags");
 
 if (filtroTags) {
-
     filtroTags.addEventListener("click", function (event) {
-
         const tag = event.target.closest("li");
 
         if (!tag) return;
@@ -62,10 +60,10 @@ if (filtroTags) {
         const tagsSelecionadas = Array.from(
             filtroTags.querySelectorAll("li.selecionada")
         ).map(function (tag) {
-
             return Number(tag.dataset.tagId);
-
         });
+
+        localStorage.setItem("filtrosArtigos", JSON.stringify(tagsSelecionadas));
 
         carregarArtigos(tagsSelecionadas);
 
@@ -143,7 +141,22 @@ async function carregarArtigos(tagsSelecionadas = []) {
 }
 
 if (document.getElementById("listaArtigos")) {
-    carregarArtigos();
+
+    const filtrosSalvos = JSON.parse(
+        localStorage.getItem("filtrosArtigos") || "[]"
+    );
+
+    filtrosSalvos.forEach(function (idTag) {
+        const tag = filtroTags.querySelector(
+            `li[data-tag-id="${idTag}"]`
+        );
+
+        if (tag) {
+            tag.classList.add("selecionada");
+        }
+    });
+
+    carregarArtigos(filtrosSalvos);
 }
 
 // Função para verificar se o usuário está logado
@@ -189,6 +202,10 @@ async function verificarLogin() {
 
                 <div class="perfil-dropdown" id="perfilDropdown">
 
+                    <button id="btnMeusArtigos">
+                        Meus artigos
+                    </button>
+
                     <button id="btnLogout">
                         Sair
                     </button>
@@ -208,38 +225,24 @@ async function verificarLogin() {
         `;
 
         document.getElementById("fotoPerfilNav").addEventListener("click", function () {
-
             const perfilDropdown = document.getElementById("perfilDropdown");
-
             perfilDropdown.classList.toggle("aberto");
 
         });
 
+        // Redirecionar para a página "Meus Artigos"
+        document.getElementById("btnMeusArtigos").addEventListener("click", function () {
+            window.location.href = "meus-artigos.html";
+        });
+
+        // Logout
         document.getElementById("btnLogout").addEventListener("click", function () {
-
             localStorage.removeItem("token");
-
-            loginButtons.innerHTML = `
-                <a href="login.html" class="desktop-nav-links ps-5">
-                    LOGIN
-                </a>
-
-                <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menu"
-                    aria-expanded="false" aria-controls="mobileNavPanel">
-
-                    <span></span>
-                    <span></span>
-                    <span></span>
-
-                </button>
-            `;
-
+            window.location.href = "index.html";
         });
 
     } catch (erro) {
-
         console.error("Erro ao verificar login:", erro);
-
     }
 
 }

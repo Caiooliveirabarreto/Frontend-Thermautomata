@@ -24,13 +24,13 @@ class ArtigosDB(Base):
 class FontesDB(Base):
     __tablename__ = 'fontes'
     idfont = Column(Integer, primary_key=True, index=True)
-    nome = Column(String(255), nullable=False)
     link = Column(String(255), nullable=False)
 
 class ArtigosFontesDB(Base):
     __tablename__ = 'artigos_fontes'
     idart = Column(Integer, ForeignKey("artigos.idart"), primary_key=True)
     idfont = Column(Integer, ForeignKey("fontes.idfont"), primary_key=True)
+    nome = Column(String(255), nullable=False)
 
 class TagsDB(Base):
     __tablename__ = 'tags'

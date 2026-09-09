@@ -84,7 +84,7 @@
         async function carregarArtigo() {
             try {
                 const resposta = await fetch(
-                    `http://127.0.0.1:8000/artigos/${idArtigo}`
+                    `http://127.0.0.1:8000/artigos/${idArtigo}/detalhes`
                 );
 
                 if (!resposta.ok) {
@@ -109,6 +109,38 @@
 
                     <div class="conteudo-artigo">
                         <p>${artigo.artigo}</p>
+                    </div>
+
+                    <div class="tags-artigo">
+                        <h3>Tags</h3>
+
+                        <div class="lista-tags-artigo">
+                            ${
+                                artigo.tags.map(function(tag) {
+                                    return `<span class="tag-artigo">${tag.nome}</span>`;
+                                }).join("")
+                            }
+                        </div>
+                    </div>
+
+                    <div class="fontes-artigo">
+                        <h3>Referências</h3>
+
+                        <div class="lista-fontes-artigo">
+                            ${
+                                artigo.fontes.map(function(fonte) {
+                                    return `
+                                        <div class="fonte-artigo">
+                                            <strong>${fonte.nome}</strong>
+
+                                            <a href="${fonte.link}" target="_blank">
+                                                ${fonte.link}
+                                            </a>
+                                        </div>
+                                    `;
+                                }).join("")
+                            }
+                        </div>
                     </div>
                 `;
 

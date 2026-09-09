@@ -58,7 +58,7 @@
 
     <div class="container mt-5 mb-5">
 
-        <form>
+        <form id="formCriarArtigo">
 
             <div class="mb-4">
                 <label for="titulo" class="form-label fw-bold">Título</label>
@@ -72,19 +72,43 @@
 
             <h6 class="fw-bold mb-4">Referências</h6>
 
-            <div class="mb-3">
-                <label for="nomeReferencia" class="form-label">Nome</label>
-                <input type="text" class="form-control campo" id="nomeReferencia" placeholder="Digite o nome da referência">
+            <div id="referencias">
+
+                <div class="referencia mb-3">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label class="form-label">Nome</label>
+                        <button type="button" class="btn-remover-referencia">
+                            REMOVER
+                        </button>
+                    </div>
+
+                    <input
+                        type="text"
+                        class="form-control campo nome-referencia"
+                        placeholder="Digite o nome da referência"
+                    >
+
+                    <label class="form-label mt-3">Link</label>
+                    <input
+                        type="text"
+                        class="form-control campo link-referencia"
+                        placeholder="Digite o link da referência"
+                    >
+
+                </div>
+
             </div>
 
-            <div class="mb-2">
-                <label for="linkReferencia" class="form-label">Link</label>
-                <input type="text" class="form-control campo" id="linkReferencia" placeholder="Digite o link da referência">
+            <h6 class="fw-bold mb-4 mt-5">Tags</h6>
+
+            <div id="listaTags" class="d-flex flex-wrap gap-2 mb-4">
+                <p>Carregando tags...</p>
             </div>
 
             <div class="d-flex justify-content-between align-items-center">
 
-                <button type="button" class="btn-adicionar">
+                <button type="button" class="btn-adicionar" id="btnAdicionarReferencia">
                     <img src="assets/plus-large-svgrepo-com.svg" class="btn-criar-icon">
                     <span>ADICIONAR</span>
                 </button>
@@ -101,6 +125,197 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="script.js"></script>
+    <script>
+        const btnAdicionarReferencia = document.getElementById("btnAdicionarReferencia");
+        const referencias = document.getElementById("referencias");
+
+        btnAdicionarReferencia.addEventListener("click", function () {
+
+            const novaReferencia = document.createElement("div");
+
+            novaReferencia.classList.add("referencia", "mb-3");
+
+            novaReferencia.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <label class="form-label">Nome</label>
+
+                    <button type="button" class="btn-remover-referencia">
+                        REMOVER
+                    </button>
+                </div>
+
+                <input
+                    type="text"
+                    class="form-control campo nome-referencia"
+                    placeholder="Digite o nome da referência"
+                >
+
+                <label class="form-label mt-3">Link</label>
+
+                <input
+                    type="text"
+                    class="form-control campo link-referencia"
+                    placeholder="Digite o link da referência"
+                >
+            `;
+
+            novaReferencia
+                .querySelector(".btn-remover-referencia")
+                .addEventListener("click", function () {
+                    novaReferencia.remove();
+                });
+
+            referencias.appendChild(novaReferencia);
+        });
+    </script>
+    <script>
+        document.getElementById("formCriarArtigo").addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                alert("Você precisa estar logado para criar um artigo.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            const titulo = document.getElementById("titulo").value.trim();
+            const artigo = document.getElementById("artigo").value.trim();
+
+            const referencias = Array.from(
+                document.querySelectorAll(".referencia")
+            ).map(function (referencia) {
+
+                return {
+                    nome: referencia.querySelector(".nome-referencia").value.trim(),
+                    link: referencia.querySelector(".link-referencia").value.trim()
+                };
+
+            });
+
+            const tagsSelecionadas = Array.from(
+                document.querySelectorAll(".tag-opcao.selecionada")
+            ).map(function (tag) {
+                return Number(tag.dataset.tagId);
+            });
+
+            if (!titulo || !artigo) {
+                alert("Preencha o título e o artigo.");
+                return;
+            }
+
+            if (referencias.length === 0) {
+                alert("Adicione pelo menos uma referência.");
+                return;
+            }
+
+            for (const referencia of referencias) {
+                if (!referencia.nome || !referencia.link) {
+                    alert("Preencha o nome e o link de todas as referências.");
+                    return;
+                }
+            }
+
+            if (tagsSelecionadas.length === 0) {
+                alert("Selecione pelo menos uma tag.");
+                return;
+            }
+
+            const dados = {
+                titulo: titulo,
+                artigo: artigo,
+                fontes: referencias,
+                tags: tagsSelecionadas
+            };
+
+            try {
+
+                const resposta = await fetch(
+                    "http://127.0.0.1:8000/artigos/criar",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify(dados)
+                    }
+                );
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    alert(
+                        resultado.detail || "Erro ao criar o artigo."
+                    );
+                    return;
+                }
+
+                alert("Artigo enviado com sucesso!");
+
+                window.location.href = "artigos.html";
+
+            } catch (erro) {
+
+                console.error("Erro ao enviar artigo:", erro);
+
+                alert("Não foi possível conectar com o servidor.");
+
+            }
+
+        });
+    </script>
+    <script>
+        const listaTags = document.getElementById("listaTags");
+
+        async function carregarTags() {
+            try {
+                const resposta = await fetch(
+                    "http://127.0.0.1:8000/artigos/tags"
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Erro ao buscar tags");
+                }
+
+                const tags = await resposta.json();
+
+                listaTags.innerHTML = "";
+
+                tags.forEach(function (tag) {
+                    const botao = document.createElement("button");
+
+                    botao.type = "button";
+                    botao.classList.add("tag-opcao");
+                    botao.dataset.tagId = tag.idtag;
+                    botao.textContent = tag.nome;
+
+                    botao.addEventListener("click", function () {
+                        botao.classList.toggle("selecionada");
+                    });
+
+                    listaTags.appendChild(botao);
+                });
+
+            } catch (erro) {
+                console.error("Erro ao carregar tags:", erro);
+                listaTags.innerHTML = "<p>Erro ao carregar as tags.</p>";
+            }
+        }
+
+        carregarTags();
+    </script>
+    <script>
+        document.querySelectorAll(".btn-remover-referencia").forEach(function (botao) {
+
+            botao.addEventListener("click", function () {
+                botao.closest(".referencia").remove();
+            });
+
+        });
+    </script>
 
 </body>
 </html>

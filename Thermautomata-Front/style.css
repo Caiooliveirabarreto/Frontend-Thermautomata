@@ -553,6 +553,33 @@ label{
     border-color: inherit !important;
 }
 
+.tag-opcao {
+    border: 1px solid #222;
+    background: white;
+    border-radius: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tag-opcao.selecionada {
+    background: #222;
+    color: white;
+}
+
+.btn-remover-referencia {
+    border: none;
+    background: none;
+    color: #dc3545;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-remover-referencia:hover {
+    text-decoration: underline;
+}
+
 /* =======================================================
    ARTIGO
 ======================================================= */
@@ -581,6 +608,80 @@ label{
 .estrela {
     font-size: 28px;
     line-height: 1;
+}
+
+/* =========================
+   TAGS DO ARTIGO
+========================= */
+
+.tags-artigo {
+    margin-top: 40px;
+}
+
+.tags-artigo h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.lista-tags-artigo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-artigo {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid #222;
+    border-radius: 20px;
+    font-size: 14px;
+    background-color: white;
+}
+
+
+/* =========================
+   REFERÊNCIAS DO ARTIGO
+========================= */
+
+.fontes-artigo {
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+.fontes-artigo h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.lista-fontes-artigo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fonte-artigo {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+}
+
+.fonte-artigo strong {
+    font-size: 15px;
+}
+
+.fonte-artigo a {
+    color: #333;
+    font-size: 14px;
+    word-break: break-all;
+    text-decoration: underline;
+}
+
+.fonte-artigo a:hover {
+    color: #000;
 }
 
 /* =======================================================

@@ -27,6 +27,7 @@ def criar_artigo(
     tags_existentes = db.query(TagsDB).filter(
         TagsDB.idtag.in_(ids_tags)
     ).all()
+
     if len(tags_existentes) != len(ids_tags):
         raise HTTPException(
             status_code=404,
@@ -44,16 +45,25 @@ def criar_artigo(
     db.flush()
 
     for fonte in artigo.fontes:
-        nova_fonte = FontesDB(
-            nome=fonte.nome,
-            link=fonte.link
-        )   
-        db.add(nova_fonte)
-        db.flush()
+        fonte_existente = db.query(FontesDB).filter(
+            FontesDB.link == fonte.link
+        ).first()
+
+        if fonte_existente:
+            id_fonte = fonte_existente.idfont
+        else:
+            nova_fonte = FontesDB(
+                link=fonte.link
+            )
+            db.add(nova_fonte)
+            db.flush()
+
+            id_fonte = nova_fonte.idfont
 
         relacao = ArtigosFontesDB(
             idart=novo_artigo.idart,
-            idfont=nova_fonte.idfont
+            idfont=id_fonte,
+            nome=fonte.nome
         )
         db.add(relacao)
 
@@ -261,6 +271,20 @@ def rejeitar_artigo(
         "mensagem": "Artigo rejeitado com sucesso"
     }
 
+@router.get("/tags")
+def listar_tags(
+    db: Session = Depends(get_db)
+):
+    tags = db.query(TagsDB).all()
+
+    return [
+        {
+            "idtag": tag.idtag,
+            "nome": tag.nome
+        }
+        for tag in tags
+    ]
+
 @router.get("/", response_model=list[ArtigoResponse])
 def listar_artigos(
     autor: str | None = None,
@@ -305,6 +329,76 @@ def listar_artigos(
         }
         for artigo, nome_autor in resultados
     ]
+
+@router.get("/{idart}/detalhes")
+def buscar_detalhes_artigo(
+    idart: int,
+    db: Session = Depends(get_db)
+):
+    resultado = db.query(
+        ArtigosDB,
+        UsuarioDB.nome.label("nome_autor")
+    ).join(
+        UsuarioDB,
+        UsuarioDB.iduser == ArtigosDB.iduser
+    ).filter(
+        ArtigosDB.idart == idart
+    ).first()
+
+    if not resultado:
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não encontrado"
+        )
+
+    artigo, nome_autor = resultado
+
+    fontes = db.query(
+        ArtigosFontesDB.nome,
+        FontesDB.link
+    ).join(
+        FontesDB,
+        FontesDB.idfont == ArtigosFontesDB.idfont
+    ).filter(
+        ArtigosFontesDB.idart == idart
+    ).all()
+
+    tags = db.query(
+        TagsDB.idtag,
+        TagsDB.nome
+    ).join(
+        ArtigosTagsDB,
+        ArtigosTagsDB.idtag == TagsDB.idtag
+    ).filter(
+        ArtigosTagsDB.idart == idart
+    ).all()
+
+    return {
+        "idart": artigo.idart,
+        "titulo": artigo.titulo,
+        "artigo": artigo.artigo,
+        "iduser": artigo.iduser,
+        "nome_autor": nome_autor,
+        "status": artigo.status,
+        "data_criacao": artigo.data_criacao,
+        "data_atualizacao": artigo.data_atualizacao,
+
+        "fontes": [
+            {
+                "nome": fonte.nome,
+                "link": fonte.link
+            }
+            for fonte in fontes
+        ],
+
+        "tags": [
+            {
+                "idtag": tag.idtag,
+                "nome": tag.nome
+            }
+            for tag in tags
+        ]
+    }
 
 @router.get("/{idart}", response_model=ArtigoResponse)
 def buscar_artigo(

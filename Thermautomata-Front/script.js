@@ -50,8 +50,11 @@
 const filtroTags = document.getElementById("filtroTags");
 
 if (filtroTags) {
+
     filtroTags.addEventListener("click", function (event) {
+
         const tag = event.target.closest("li");
+
         if (!tag) return;
 
         tag.classList.toggle("selecionada");
@@ -59,17 +62,35 @@ if (filtroTags) {
         const tagsSelecionadas = Array.from(
             filtroTags.querySelectorAll("li.selecionada")
         ).map(function (tag) {
+
             return Number(tag.dataset.tagId);
+
         });
 
-        console.log(tagsSelecionadas);
+        carregarArtigos(tagsSelecionadas);
+
     });
+
 }
 
 // Função para carregar artigos do backend
-async function carregarArtigos() {
+async function carregarArtigos(tagsSelecionadas = []) {
+
     try {
-        const resposta = await fetch("http://127.0.0.1:8000/artigos/");
+
+        let url = "http://127.0.0.1:8000/artigos/";
+
+        if (tagsSelecionadas.length > 0) {
+            const parametros = tagsSelecionadas
+                .map(function (id) {
+                    return `tags=${id}`;
+                })
+                .join("&");
+
+            url += "?" + parametros;
+        }
+
+        const resposta = await fetch(url);
 
         if (!resposta.ok) {
             throw new Error("Erro ao buscar artigos");
@@ -86,25 +107,38 @@ async function carregarArtigos() {
         });
 
         artigosAprovados.forEach(function (artigo) {
+
             const elemento = document.createElement("div");
 
             elemento.classList.add("artigos");
 
             elemento.innerHTML = `
-                <h2 class="artigo-titulo" style="cursor: pointer;" onclick="window.location.href='artigo.html?id=${artigo.idart}'">${artigo.titulo}</h2>
+                <h2 class="artigo-titulo" style="cursor: pointer;" onclick="window.location.href='artigo.html?id=${artigo.idart}'">
+                    ${artigo.titulo}
+                </h2>
+
                 <h3 class="autor">${artigo.nome_autor}</h3>
-                <p class="data-artigo">${new Date(artigo.data_criacao).toLocaleDateString("pt-BR")}</p>
-                <p class="artigo-texto">${
-                    artigo.artigo.length > 50
-                        ? artigo.artigo.substring(0, 50) + "..."
-                        : artigo.artigo
-                }</p>
+
+                <p class="data-artigo">
+                    ${new Date(artigo.data_criacao).toLocaleDateString("pt-BR")}
+                </p>
+
+                <p class="artigo-texto">
+                    ${
+                        artigo.artigo.length > 50
+                            ? artigo.artigo.substring(0, 50) + "..."
+                            : artigo.artigo
+                    }
+                </p>
             `;
 
             listaArtigos.appendChild(elemento);
         });
+
     } catch (erro) {
+
         console.error("Erro:", erro);
+
     }
 }
 

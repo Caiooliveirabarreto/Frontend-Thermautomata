@@ -289,10 +289,37 @@ if (btnCriarArtigo) {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            alert("Você precisa estar logado para escrever um artigo");
+            mostrarNotificacao(
+                "Você precisa estar logado para escrever um artigo.",
+                "aviso"
+            );
             return;
         }
 
         window.location.href = "criar.html";
     });
+}
+
+function mostrarNotificacao(mensagem, tipo = "sucesso") {
+
+    let notificacao = document.getElementById("notificacao");
+
+    if (!notificacao) {
+        notificacao = document.createElement("div");
+        notificacao.id = "notificacao";
+        document.body.appendChild(notificacao);
+    }
+
+    notificacao.textContent = mensagem;
+
+    notificacao.className = "";
+    notificacao.classList.add("notificacao", tipo);
+
+    setTimeout(function () {
+        notificacao.classList.add("visivel");
+    }, 10);
+
+    setTimeout(function () {
+        notificacao.classList.remove("visivel");
+    }, 3500);
 }

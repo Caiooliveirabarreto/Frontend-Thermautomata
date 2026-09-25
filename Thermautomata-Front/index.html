@@ -24,12 +24,12 @@
                     <img src="assets/logo.png" alt="Logo" class="img-fluid">
                 </div>
                 <div class="col-5 align-items-center d-flex justify-content-center desktop-nav-links">
-                    <a href="index.html" class="ps-5">SOBRE</a>
-                    <a href="artigos.html" class="ps-5">ARTIGOS</a>
-                    <a href="download.html" class="ps-5">DOWNLOAD</a>
+                    <a href="index.html" class="nav-link-custom">SOBRE</a>
+                    <a href="artigos.html" class="nav-link-custom">ARTIGOS</a>
+                    <a href="download.html" class="nav-link-custom">DOWNLOAD</a>
                 </div>
                 <div class="col-2 align-items-end justify-content-end d-flex" id="loginButtons">
-                    <a href="login.html" class="desktop-nav-links ps-5">LOGIN</a>
+                    <a href="login.html" class="nav-link-custom">LOGIN</a>
 
                     <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menu" aria-expanded="false"
                         aria-controls="mobileNavPanel">
@@ -53,119 +53,384 @@
         <button class="login-btn-mobile">Login</button>
     </div>
 
-    <section id="Sobre">
-        <div class="container text-center">
-            <img src="assets/Design sem nome.png" class="img-fluid " alt="Imagem 1" style="width: 30%; height: auto;">
-            <div class="text-center container row">
-                <p class="mb-4">Heart Roulette é um estudio de desenvolvimento de jogos indie localizado em Ribeirão Pires,
-                    São Paulo</p>
-                <p class="mb-4">Nossa missão é criar jogos divertidos e inovadores para todos conseguirem se divertir</p>
-                <h1>A Equipe</h1>
+    <section id="Sobre" class="sobre-estudio">
+
+        <div class="container">
+
+            <div class="estudio-introducao">
+
+                <img
+                    src="assets/Design sem nome.png"
+                    alt="Heart Roulette"
+                    class="logo-estudio">
+
+                <div class="estudio-texto">
+
+                    <span>HEART ROULETTE</span>
+
+                    <h1>
+                        Criando mundos,
+                        histórias e experiências.
+                    </h1>
+
+                    <p>
+                        Somos um estúdio independente de desenvolvimento
+                        de jogos localizado em Ribeirão Pires, São Paulo.
+                    </p>
+
+                    <p>
+                        Nossa missão é criar jogos divertidos e inovadores,
+                        combinando diferentes áreas da criação para construir
+                        experiências únicas.
+                    </p>
+
+                </div>
+
             </div>
-            <div class="row">
-                <div class="col-4">
-                    <img class="img-redonda" src="assets/Gui.jpg" alt="Imagem 1" class="img-fluid">
-                    <p class="mt-2">Guilherme Gimenes é o designer grafico e programador da equipe. Guilherme já estudou diversos tópicos envolvendo Game Design e Level Design, e entrou na equipe para reforçar o design da jogabilidade de todo IP criado pelo estudio.</p>
+
+
+            <div class="equipe-secao">
+
+                <div class="secao-titulo">
+
+                    <span>NOSSA EQUIPE</span>
+
+                    <h2>A equipe</h2>
+
+                    <p>
+                        Pessoas com diferentes habilidades trabalhando
+                        juntas para transformar ideias em projetos.
+                    </p>
+
                 </div>
-                <div class="col-4">
-                    <img class="img-redonda" src="assets/Joo.jpg" alt="Imagem 1" class="img-fluid">
-                    <p class="mt-2">João Arthur Rípoli é Fundador da Heart Roulette e programador da equipe, sua experiência com criação de jogos começou com diversos sistemas de TTRPGs que criou. </p>
+
+
+                <div class="equipe-grid">
+
+                    <div class="membro">
+
+                        <img
+                            src="assets/Gui.jpg"
+                            alt="Guilherme Gimenes">
+
+                        <h3>Guilherme Gimenes</h3>
+
+                        <span>Design gráfico e programação</span>
+
+                        <p>
+                            Atua nas áreas de design gráfico, Game Design,
+                            Level Design e programação.
+                        </p>
+
+                    </div>
+
+
+                    <div class="membro">
+
+                        <img
+                            src="assets/Joo.jpg"
+                            alt="João Arthur Rípoli">
+
+                        <h3>João Arthur Rípoli</h3>
+
+                        <span>Fundador e programação</span>
+
+                        <p>
+                            Fundador da Heart Roulette e responsável
+                            principalmente pela programação.
+                        </p>
+
+                    </div>
+
+
+                    <div class="membro">
+
+                        <img
+                            src="assets/Dudu.jpg"
+                            alt="Eduardo Luiz Franceliano">
+
+                        <h3>Eduardo Luiz Franceliano</h3>
+
+                        <span>Modelagem 3D e design gráfico</span>
+
+                        <p>
+                            Trabalha com modelagem 3D e design gráfico
+                            dentro dos projetos do estúdio.
+                        </p>
+
+                    </div>
+
+
+                    <div class="membro">
+
+                        <img
+                            src="assets/IMG_20260613_133433_040.png"
+                            alt="Caio Oliveira Barreto">
+
+                        <h3>Caio Oliveira Barreto</h3>
+
+                        <span>Música</span>
+
+                        <p>
+                            Responsável pela música da Heart Roulette,
+                            com experiência em diferentes gêneros e instrumentos.
+                        </p>
+
+                    </div>
+
+
+                    <div class="membro">
+
+                        <img
+                            src="assets/euarthur (1).jpg"
+                            alt="Arthur Ribeiro Luz">
+
+                        <h3>Arthur Ribeiro Luz</h3>
+
+                        <span>Co-fundador</span>
+
+                        <p>
+                            Co-fundador da Heart Roulette e participante
+                            do desenvolvimento dos projetos do estúdio.
+                        </p>
+
+                    </div>
+
                 </div>
-                <div class="col-4">
-                    <img class="img-redonda" src="assets/Dudu.jpg" alt="Imagem 1" class="img-fluid">
-                    <p class="mt-2">Eduardo Luiz Franceliano é o modelador 3d do grupo e designer gráfico. Entrou na equipe por causa do interesse em jogos e experiencia em programação.</p>
-                </div>
-            </div>
-            <div class="row justify-content-center mt-4">
-                <div class="col-4">
-                    <img class="img-redonda" src="assets/IMG_20260613_133433_040.png" alt="Imagem 1" class="img-fluid">
-                    <p class="mt-2">Caio Oliveira Barreto é o músico oficial da Heart Roulette. Possui experiência em vários gêneros da música, e toca instrumentos como guitarra e violão, possuindo anos de experiência.</p>
-                </div>
-                <div class="col-4">
-                    <img class="img-redonda" src="assets/euarthur (1).jpg" alt="Imagem 1" class="img-fluid">
-                    <p class="mt-2">Arthur Ribeiro Luz é o Co-Fundador da Heart Roulette.  Junto a João Arthur, os dois iniciaram a ideia da criação da Equipe, participa do acervo ativo do estúdio</p>
-                </div>
+
             </div>
 
         </div>
+
     </section>
 
-    <div class="container text-center mt-4">
-        <h1 class="mt-4">Sobre o Projeto</h1>
-        <div class="row align-items-center justify-content-center mt-4">
-            <div class="col-4">
-                <img src="https://placehold.co/600x400" alt="Imagem 1" class="img-fluid">
-            </div>
-            <div class="col-5">
-                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Voluptas, voluptate.</p>
-            </div>
-        </div>
-        <div class="row align-items-center justify-content-center mt-4">
-            <div class="col-5">
-                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Voluptas, voluptate.</p>
-            </div>
-            <div class="col-4">
-                <img src="https://placehold.co/600x400" alt="Imagem 1" class="img-fluid">
-            </div>
-        </div>
-        <div class="row align-items-center justify-content-center mt-4">
-            <div class="col-4">
-                <img src="https://placehold.co/600x400" alt="Imagem 1" class="img-fluid">
-            </div>
-            <div class="col-5">
-                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Voluptas, voluptate.</p>
-            </div>
-        </div>
-    </div>
+    <section class="sobre-projeto">
 
+        <div class="container">
 
-    <div class="container text-center mt-4">
-        <h1 class="mt-4">Baseado Nas ODS's:</h1>
-        <div class="row align-items-center justify-content-center">
-            <div class="col-4">
-                <img class="img-menor" src="assets/Objetivo_Desenvolvimento_Sustentável_9_PT.jpg" alt="Imagem 1" class="img-fluid">
-            </div>
-            <div class="col-4">
-                <img class="img-menor" src="assets/11.png" alt="Imagem 1" class="img-fluid">
-            </div>
-            <div class="col-4">
-                <img class="img-menor" src="assets/ods12.jpg" alt="Imagem 1" class="img-fluid">
-            </div>
-        </div>
-    </div>
-
-    <footer class="text-center mt-5 footer-css">
-        <div class="row">
-            <div class="col-4 align-items-start justify-content-start">
-                <p class="mt-3">Heart Roulette é um estudio de desenvolvimento de jogos indie localizado em Ribeirão Pires, São Paulo
+            <div class="secao-titulo">
+                <span>O PROJETO</span>
+                <h1>Sobre o Thermautomata</h1>
+                <p>
+                    Um jogo que explora as relações entre tecnologia,
+                    sociedade e o futuro das cidades.
                 </p>
-                <p class="mt-3">Nossa missão é criar jogos divertidos e inovadores para todos conseguirem se divertir
-                </p>
-                <p class="mt-3">Copyright © 2026 Heart Roulette. Todos os direitos reservados.</p>
             </div>
-            <div class="col-4 align-items-center justify-content-center">
-            </div>
-            <div class="col-4 align-items-end justify-content-end">
 
-                <ul class="social-links">
-                    <li><a href="index.html">Sobre</a></li>
-                    <li><a href="artigos.html">Artigos</a></li>
-                    <li><a href="#">Pesquisa</a></li>
-                    <li><a href="download.html">Download</a></li>
-                </ul>
-                <div class="justify-content-evenly mt-5">
-                    <a href="https://youtube.com" target="_blank" class="social-media" alt="Youtube"><ion-icon name="logo-youtube"></ion-icon></a>
-                    <a href="https://instagram.com" target="_blank" class="social-media" alt="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
-                    <a href="https://x.com" target="_blank" class="social-media" alt="Twitter"><ion-icon name="logo-twitter"></ion-icon></a>
+            <div class="projeto-bloco">
+
+                <div class="projeto-imagem">
+                    <img
+                        src="assets/thermautomata.png"
+                        alt="Thermautomata"
+                        class="img-fluid">
+                </div>
+                <div class="projeto-texto">
+
+                    <h2>Um mundo automatizado</h2>
+                    <p>
+                        Thermautomata é um projeto desenvolvido pela Heart Roulette
+                        que aborda temas relacionados à automação, produção,
+                        consumo, urbanização e às relações entre seres humanos
+                        e tecnologia.
+                    </p>
+                    <p>
+                        O jogo busca apresentar esses temas de forma interativa,
+                        permitindo que o jogador explore um mundo no qual a
+                        automação possui um papel cada vez maior na sociedade.
+                    </p>
+
                 </div>
 
             </div>
+
+            <div class="projeto-bloco projeto-bloco-invertido">
+                <div class="projeto-texto">
+
+                    <h2>Tecnologia e sociedade</h2>
+                    <p>
+                        O projeto utiliza elementos de game design para discutir
+                        como o avanço tecnológico pode transformar a maneira como
+                        as pessoas vivem, trabalham e interagem com o espaço urbano.
+                    </p>
+                    <p>
+                        Dessa forma, Thermautomata procura unir entretenimento,
+                        reflexão e experimentação dentro de uma experiência
+                        interativa.
+                    </p>
+
+                </div>
+                <div class="projeto-imagem">
+
+                    <img
+                        src="assets/thermautomata-2.png"
+                        alt="Mundo de Thermautomata"
+                        class="img-fluid">
+
+                </div>
+            </div>
+
+            <div class="projeto-bloco">
+
+                <div class="projeto-imagem">
+
+                    <img
+                        src="assets/thermautomata-3.png"
+                        alt="Elementos de Thermautomata"
+                        class="img-fluid">
+
+                </div>
+
+                <div class="projeto-texto">
+
+                    <h2>Um projeto desenvolvido em equipe</h2>
+                    <p>
+                        Cada integrante da Heart Roulette contribui com diferentes
+                        áreas do desenvolvimento, incluindo programação, design,
+                        modelagem 3D, música e planejamento.
+                    </p>
+                    <p>
+                        O resultado é um projeto interdisciplinar que combina
+                        diferentes conhecimentos para construir a experiência
+                        de Thermautomata.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="ods">
+
+        <div class="ods-container">
+
+            <div class="ods-titulo">
+
+                <span>OBJETIVOS DE DESENVOLVIMENTO SUSTENTÁVEL</span>
+
+                <h2>Baseado nas ODS's</h2>
+
+                <p>
+                    Thermautomata aborda temas relacionados à inovação,
+                    desenvolvimento urbano e consumo responsável.
+                </p>
+
+            </div>
+
+            <div class="ods-grid">
+
+                <div class="ods-item">
+
+                    <img
+                        src="assets/Objetivo_Desenvolvimento_Sustentável_9_PT.jpg"
+                        alt="ODS 9 - Indústria, inovação e infraestrutura">
+
+                    <h3>Indústria, inovação e infraestrutura</h3>
+
+                    <p>
+                        Relacionada à inovação, tecnologia e desenvolvimento
+                        de novas formas de produção.
+                    </p>
+
+                </div>
+
+                <div class="ods-item">
+
+                    <img
+                        src="assets/11.png"
+                        alt="ODS 11 - Cidades e comunidades sustentáveis">
+
+                    <h3>Cidades e comunidades sustentáveis</h3>
+
+                    <p>
+                        Relacionada ao desenvolvimento urbano e à construção
+                        de cidades mais sustentáveis.
+                    </p>
+
+                </div>
+
+                <div class="ods-item">
+
+                    <img
+                        src="assets/ods12.jpg"
+                        alt="ODS 12 - Consumo e produção responsáveis">
+
+                    <h3>Consumo e produção responsáveis</h3>
+
+                    <p>
+                        Relacionada à produção, ao consumo e ao uso consciente
+                        dos recursos.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-info">
+
+                <p class="footer-text">
+                    Heart Roulette é um estúdio de desenvolvimento de
+                    jogos indie localizado em Ribeirão Pires, São Paulo.
+                </p>
+
+                <p class="footer-text">
+                    Nossa missão é criar jogos divertidos e inovadores
+                    para todos conseguirem se divertir.
+                </p>
+
+                <p class="footer-copyright">
+                    Copyright © 2026 Heart Roulette.
+                    Todos os direitos reservados.
+                </p>
+
+            </div>
+
+            <div class="footer-direita">
+
+                <nav class="footer-links">
+
+                    <a href="index.html">Sobre</a>
+                    <span>|</span>
+
+                    <a href="artigos.html">Artigos</a>
+                    <span>|</span>
+
+                    <a href="#">Pesquisa</a>
+                    <span>|</span>
+
+                    <a href="download.html">Download</a>
+
+                </nav>
+
+                <div class="footer-social">
+
+                    <a href="#" aria-label="YouTube">
+                        <ion-icon name="logo-youtube"></ion-icon>
+                    </a>
+
+                    <a href="#" aria-label="Instagram">
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </a>
+
+                    <a href="#" aria-label="X">
+                        <ion-icon name="logo-twitter"></ion-icon>
+                    </a>
+
+                </div>
+
+            </div>
+
         </div>
 
     </footer>

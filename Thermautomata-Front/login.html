@@ -43,14 +43,27 @@
             <div class="mb-4">
                 <label class="form-label">Senha</label>
 
-                <div class="input-group-custom">
+                <div class="input-group-custom senha-container">
+
                     <i data-lucide="lock" class="input-icon"></i>
 
                     <input
                         type="password"
                         id="senha"
                         class="form-control"
-                        placeholder="••••••••" required>
+                        placeholder="••••••••"
+                        required>
+
+                    <button
+                        type="button"
+                        class="btn-mostrar-senha"
+                        id="btnMostrarSenha"
+                        aria-label="Mostrar senha">
+
+                        <i data-lucide="eye"></i>
+
+                    </button>
+
                 </div>
             </div>
 
@@ -63,10 +76,41 @@
     </div>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-
+    <script src="script.js"></script>
     <script>
         lucide.createIcons();
+        const senha = document.getElementById("senha");
+        const btnMostrarSenha = document.getElementById("btnMostrarSenha");
 
+        btnMostrarSenha.addEventListener("click", function () {
+
+            if (senha.type === "password") {
+
+                senha.type = "text";
+
+                btnMostrarSenha.innerHTML =
+                    '<i data-lucide="eye-off"></i>';
+
+                btnMostrarSenha.setAttribute(
+                    "aria-label",
+                    "Esconder senha"
+                );
+
+            } else {
+
+                senha.type = "password";
+
+                btnMostrarSenha.innerHTML =
+                    '<i data-lucide="eye"></i>';
+
+                btnMostrarSenha.setAttribute(
+                    "aria-label",
+                    "Mostrar senha"
+                );
+            }
+
+            lucide.createIcons();
+        });
         document.getElementById("formLogin").addEventListener("submit", async function (event) {
             event.preventDefault();
 
@@ -88,19 +132,22 @@
                 const resultado = await resposta.json();
 
                 if (!resposta.ok) {
-                    alert(resultado.detail);
+                    mostrarNotificacao(resultado.detail, "erro");
                     return;
                 }
 
                 localStorage.setItem("token", resultado.token);
 
-                alert("Login realizado com sucesso!");
+                mostrarNotificacao("Login realizado com sucesso!");
 
                 window.location.href = "index.html";
 
             } catch (erro) {
                 console.error("Erro:", erro);
-                alert("Não foi possível conectar com a API.");
+                mostrarNotificacao(
+                    "Não foi possível conectar com a API.",
+                    "erro"
+                );
             }
         });
     </script>

@@ -42,32 +42,60 @@
         </nav>
     </header>
 
-    <!-- Overlay e painel do menu sanduíche -->
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
-    <div class="mobile-nav-panel" id="mobileNavPanel" role="dialog" aria-modal="true" aria-label="Menu de navegação">
-        <button class="close-btn" id="closeNavBtn" aria-label="Fechar menu">&times;</button>
-        <a href="index.html">Sobre</a>
-        <a href="artigos.html">Artigos</a>
-        <a href="download.html">Download</a>
-        <button class="login-btn-mobile">Login</button>
-    </div>
 
-    <div class="row">
-        <div class="col-3 sidebar-filtros">
+    <aside class="mobile-nav-panel" id="mobileNavPanel">
+        <button
+            class="close-btn"
+            id="closeNavBtn"
+            aria-label="Fechar menu"
+        >
+            &times;
+        </button>
 
-            <button class="btn filtro-btn" data-bs-toggle="collapse" data-bs-target="#filtros"aria-expanded="true">
+        <nav>
+            <a href="index.html" class="nav-link-custom">SOBRE</a>
+            <a href="artigos.html" class="nav-link-custom">ARTIGOS</a>
+            <a href="download.html" class="nav-link-custom">DOWNLOAD</a>
 
+            <a
+                href="admin.html"
+                class="nav-link-custom"
+                id="mobileAdminLink"
+                hidden
+            >
+                PAINEL
+            </a>
+
+            <a href="meus-artigos.html" class="nav-link-custom">
+                MEUS ARTIGOS
+            </a>
+
+            <a href="login.html" class="login-btn-mobile" id="mobileAuthAction">
+                LOGIN
+            </a>
+        </nav>
+    </aside>
+
+    
+    <main class="artigos-layout">
+        <aside class="sidebar-filtros">
+            <button
+                class="btn filtro-btn"
+                data-bs-toggle="collapse"
+                data-bs-target="#filtros"
+                aria-expanded="true"
+                aria-controls="filtros"
+            >
                 <span>Filtros</span>
 
                 <div class="filtro-icones">
                     <ion-icon name="funnel-outline"></ion-icon>
                     <ion-icon class="chevron" name="chevron-down-outline"></ion-icon>
                 </div>
-
             </button>
 
             <div class="collapse show filtros-conteudo" id="filtros">
-                
                 <div class="filtro-autor">
                     <label for="filtroAutor">Autor</label>
                     <input
@@ -90,24 +118,25 @@
                     <li data-tag-id="14">Sociedade</li>
                     <li data-tag-id="15">Infraestrutura</li>
                 </ul>
-
             </div>
+        </aside>
 
-        </div>
-
-        <div class="col-6">
+        <section class="artigos-lista" aria-label="Lista de artigos">
             <div id="listaArtigos"></div>
-        </div>
-        
-        <div class="col-3 d-flex justify-content-center">
+        </section>
 
+        <div class="artigos-acoes">
             <button class="btn-criar" id="btnCriarArtigo">
-                <img src="assets/plus-large-svgrepo-com.svg" class="btn-criar-icon">
+                <img
+                    src="assets/plus-large-svgrepo-com.svg"
+                    class="btn-criar-icon"
+                    alt=""
+                >
                 <span>Criar</span>
             </button>
-
         </div>
-    </div>
+    </main>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>

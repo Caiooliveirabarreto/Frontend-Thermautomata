@@ -53,24 +53,40 @@
         </nav>
     </header>
 
-    <!-- Overlay e painel do menu sanduíche -->
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 
-    <div class="mobile-nav-panel" id="mobileNavPanel"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Menu de navegação">
+    <aside class="mobile-nav-panel" id="mobileNavPanel">
+        <button
+            class="close-btn"
+            id="closeNavBtn"
+            aria-label="Fechar menu"
+        >
+            &times;
+        </button>
 
-        <button class="close-btn" id="closeNavBtn"
-            aria-label="Fechar menu">&times;</button>
+        <nav>
+            <a href="index.html" class="nav-link-custom">SOBRE</a>
+            <a href="artigos.html" class="nav-link-custom">ARTIGOS</a>
+            <a href="download.html" class="nav-link-custom">DOWNLOAD</a>
 
-        <a href="index.html">Sobre</a>
-        <a href="artigos.html">Artigos</a>
-        <a href="download.html">Download</a>
+            <a
+                href="admin.html"
+                class="nav-link-custom"
+                id="mobileAdminLink"
+                hidden
+            >
+                PAINEL
+            </a>
 
-        <button class="login-btn-mobile">Login</button>
+            <a href="meus-artigos.html" class="nav-link-custom">
+                MEUS ARTIGOS
+            </a>
 
-    </div>
+            <a href="login.html" class="login-btn-mobile" id="mobileAuthAction">
+                LOGIN
+            </a>
+        </nav>
+    </aside>
 
     <main class="container">
         <button class="btn-voltar-artigos" onclick="history.back()">

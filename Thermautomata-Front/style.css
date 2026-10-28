@@ -1069,6 +1069,12 @@ body.nav-locked {
     color: #000;
 }
 
+.separador-artigos {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 25px 0;
+    opacity: 1;
+}
 
 /* =======================================================
    FILTRO DE AUTOR
@@ -2204,6 +2210,7 @@ input[type="password"]::-ms-clear {
     object-fit: cover;
     cursor: pointer;
     display: block;
+    border: 2px solid #000000;
 }
 
 .perfil-dropdown {

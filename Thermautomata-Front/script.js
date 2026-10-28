@@ -222,6 +222,11 @@ async function carregarArtigos(tagsSelecionadas = [], autor = "") {
             elemento.appendChild(textoElemento);
 
             listaArtigos.appendChild(elemento);
+
+            const separador = document.createElement("hr");
+            separador.classList.add("separador-artigos");
+
+            listaArtigos.appendChild(separador);
         });
     } catch (erro) {
         console.error("Erro ao carregar artigos:", erro);

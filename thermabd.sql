@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 10/09/2026 às 01:44
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.2.12
+-- Tempo de geração: 28/10/2026 às 11:58
+-- Versão do servidor: 10.4.28-MariaDB
+-- Versão do PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `thermabd`
 --
-CREATE DATABASE IF NOT EXISTS `thermabd` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `thermabd`;
 
 -- --------------------------------------------------------
 
@@ -43,18 +41,11 @@ CREATE TABLE `artigos` (
 --
 
 INSERT INTO `artigos` (`idart`, `titulo`, `artigo`, `iduser`, `status`, `data_criacao`) VALUES
-(4, 'Um artigo de Teste', 'esse é um artigo muito legal de teste', 2, 'aprovado', '2026-09-07 07:13:25'),
-(9, 'Artigo testando tags 2', 'Esse artigo é para testar as tags e ver se está funcionando', 2, 'rejeitado', '2026-09-07 08:11:44'),
-(10, 'Testando para saber se funciona as tags', 'tem que testar né ne né Estevão buxaa', 2, 'aprovado', '2026-09-07 08:26:03'),
-(13, 'Artigo gamer', 'Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem ', 3, 'pendente', '2026-09-07 20:00:24'),
-(16, 'Artigo gamerrrr', 'Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem eita eita eita', 3, 'aprovado', '2026-09-07 20:06:22'),
-(17, 'Muitas letras', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 3, 'aprovado', '2026-09-07 20:08:43'),
-(20, 'Outro artigo de teste', 'artigo diferenciado pra ver alguma coisa aí, sabe?', 2, 'pendente', '2026-09-08 19:23:33'),
-(21, 'Outro artigo de teste222', 'artigo diferenciado pra ver alguma coisa aí, sabe?2222222', 2, 'pendente', '2026-09-08 19:24:57'),
-(22, 'Outro artigo de teste333', 'artigo diferenciado pra ver alguma coisa aí, sabe333333', 2, 'pendente', '2026-09-08 19:28:29'),
-(23, 'Outro artigo de teste333', 'artigo diferenciado pra ver alguma coisa aí, sabe333333', 2, 'pendente', '2026-09-08 19:34:14'),
-(25, 'Meu artigo', 'Conteúdo...', 2, 'pendente', '2026-09-08 19:39:08'),
-(26, 'Teste frontend', 'Artigo vindo direto do front', 2, 'aprovado', '2026-09-08 20:06:22');
+(28, 'Inteligência artificial na educação', 'A inteligência artificial generativa passou a fazer parte da rotina de muitos estudantes brasileiros. Segundo uma pesquisa divulgada pelo Centro Regional de Estudos para o Desenvolvimento da Sociedade da Informação (Cetic.br), sete em cada dez alunos do ensino médio que utilizam a internet recorrem a ferramentas de inteligência artificial, como ChatGPT e Gemini, para realizar pesquisas escolares.\n\nApesar da popularização dessas tecnologias, a pesquisa apontou que apenas 32% dos estudantes receberam orientação escolar sobre como utilizá-las. Esse cenário evidencia a importância de ensinar os jovens a verificar informações, reconhecer possíveis erros nas respostas geradas e utilizar a inteligência artificial de maneira ética e responsável.\n\nA tecnologia pode contribuir para o aprendizado, facilitar a compreensão de conteúdos e ajudar na organização de pesquisas. Entretanto, seu uso deve complementar o desenvolvimento do raciocínio crítico, e não substituir a leitura, a interpretação e a produção de conhecimento pelos próprios estudantes.', 3, 'aprovado', '2026-10-28 07:52:29'),
+(29, 'Crescimento da economia brasileira', 'A economia brasileira registrou crescimento de 2,3% em 2025, de acordo com os dados divulgados pelo Instituto Brasileiro de Geografia e Estatística (IBGE). Com esse resultado, o país completou cinco anos consecutivos de expansão econômica. No quarto trimestre do ano, entretanto, a variação foi de apenas 0,1% em comparação com o trimestre anterior.\n\nO Produto Interno Bruto (PIB), indicador que representa o valor dos bens e serviços finais produzidos em um país, alcançou R$ 12,7 trilhões em valores correntes. Esse indicador é utilizado para acompanhar o desempenho da economia e avaliar mudanças na atividade produtiva.\n\nO crescimento econômico pode estar relacionado a fatores como consumo das famílias, investimentos, produção industrial e desempenho dos serviços. Apesar de ser um indicador importante, o aumento do PIB não significa necessariamente que todos os brasileiros tenham experimentado uma melhora equivalente na renda ou nas condições de vida.\n\nPor isso, a análise da economia também exige observar a distribuição de renda, o emprego, a inflação e o acesso da população a serviços essenciais.', 3, 'aprovado', '2026-10-28 07:53:05'),
+(30, 'Poluição por microplásticos', 'A contaminação por microplásticos representa um desafio ambiental que exige ações coordenadas entre governos, empresas, pesquisadores e população. Um relatório da Academia Brasileira de Ciências analisou os impactos desses pequenos fragmentos de plástico e apresentou estratégias para reduzir sua presença no meio ambiente.\n\nDe acordo com os dados apresentados pela Agência Brasil, o Brasil contribui anualmente com até 190 mil toneladas de lixo no ambiente marinho. Mundialmente, são produzidas aproximadamente 400 milhões de toneladas de plástico por ano, das quais menos de 10% são recicladas.\n\nGrande parte dos resíduos plásticos que chega aos oceanos tem origem em atividades realizadas em terra, incluindo o turismo, a indústria, a ocupação urbana desordenada e a gestão inadequada dos resíduos sólidos.\n\nO enfrentamento desse problema depende de medidas como melhorar a coleta seletiva, ampliar a reciclagem, reduzir o consumo de plásticos descartáveis e aperfeiçoar as políticas de gerenciamento de resíduos. Além disso, a conscientização ambiental é fundamental para incentivar hábitos de consumo mais responsáveis e proteger os ecossistemas aquáticos.', 2, 'pendente', '2026-10-28 07:54:12'),
+(31, 'Saneamento básico e infraestrutura', 'O acesso ao saneamento básico continua sendo um desafio importante no Brasil. Cinco anos após a entrada em vigor do novo Marco Legal do Saneamento Básico, um estudo divulgado pelo Instituto Trata Brasil apontou que os indicadores do setor não apresentaram avanços significativos.\n\nSegundo os dados apresentados pela Agência Brasil, aproximadamente 34 milhões de pessoas ainda não tinham acesso a sistemas formais de abastecimento de água, enquanto mais de 90 milhões não contavam com coleta e tratamento de esgoto.\n\nA ausência desses serviços pode provocar consequências para a saúde pública, aumentar a contaminação de rios e solos e ampliar as desigualdades entre regiões e grupos sociais. Comunidades sem infraestrutura adequada ficam mais expostas a doenças relacionadas à água contaminada e a condições sanitárias precárias.\n\nPara enfrentar o problema, é necessário ampliar os investimentos, melhorar a gestão dos serviços e fortalecer o planejamento das obras de saneamento. A universalização do abastecimento de água e do tratamento de esgoto também depende da fiscalização das metas e da cooperação entre governos, prestadores de serviços e sociedade.', 2, 'pendente', '2026-10-28 07:54:52'),
+(32, 'Saúde mental e uso de telas nas escolas', 'O impacto das tecnologias digitais na saúde mental dos estudantes tornou-se um tema cada vez mais presente nas escolas brasileiras. Uma pesquisa TIC Educação 2025, realizada pelo Centro Regional de Estudos para o Desenvolvimento da Sociedade da Informação (Cetic.br), indicou que 80% das instituições de ensino fundamental e médio discutiram o assunto em 2025. Em 2024, esse percentual era de 62%.\n\nO aumento mostra que as instituições de ensino estão dando mais atenção às possíveis consequências do uso de dispositivos digitais entre crianças e adolescentes. Celulares, computadores e tablets podem facilitar o acesso à informação e apoiar atividades pedagógicas, mas seu uso excessivo ou inadequado também pode levantar preocupações relacionadas ao bem-estar e à rotina dos estudantes.\n\nNesse contexto, a escola e a família desempenham papéis importantes na orientação dos jovens. Conversas sobre hábitos digitais, equilíbrio entre atividades on-line e presenciais e uso responsável da tecnologia podem contribuir para uma relação mais saudável com as telas.\n\nO debate também reforça a importância de desenvolver estratégias educacionais que aproveitem os benefícios dos recursos digitais sem ignorar seus possíveis efeitos sobre a saúde e o aprendizado.', 2, 'pendente', '2026-10-28 07:55:43');
 
 -- --------------------------------------------------------
 
@@ -73,16 +64,11 @@ CREATE TABLE `artigos_fontes` (
 --
 
 INSERT INTO `artigos_fontes` (`idart`, `idfont`, `nome`) VALUES
-(10, 9, 'Lol'),
-(13, 12, 'Tiktok'),
-(16, 15, 'Google'),
-(17, 16, 'Figma'),
-(20, 18, 'Que'),
-(23, 18, 'Que3333'),
-(25, 18, 'Figma'),
-(25, 19, 'Documentação oficial'),
-(25, 20, 'Google'),
-(26, 21, 'Front');
+(28, 23, 'Agência Brasil'),
+(29, 24, 'Agência Brasil'),
+(30, 25, 'Agência Brasil'),
+(31, 26, 'Agência Brasil'),
+(32, 27, 'Agência Brasil');
 
 -- --------------------------------------------------------
 
@@ -100,28 +86,22 @@ CREATE TABLE `artigos_tags` (
 --
 
 INSERT INTO `artigos_tags` (`idart`, `idtag`) VALUES
-(13, 7),
-(16, 7),
-(16, 13),
-(17, 7),
-(17, 13),
-(20, 6),
-(20, 7),
-(20, 9),
-(20, 13),
-(21, 6),
-(21, 7),
-(21, 9),
-(22, 6),
-(22, 7),
-(22, 9),
-(23, 6),
-(23, 7),
-(23, 9),
-(25, 9),
-(25, 13),
-(26, 9),
-(26, 10);
+(28, 9),
+(28, 10),
+(28, 14),
+(29, 6),
+(29, 7),
+(29, 14),
+(30, 8),
+(30, 13),
+(30, 14),
+(31, 6),
+(31, 11),
+(31, 15),
+(32, 9),
+(32, 10),
+(32, 11),
+(32, 14);
 
 -- --------------------------------------------------------
 
@@ -142,10 +122,16 @@ INSERT INTO `fontes` (`idfont`, `link`) VALUES
 (9, '67.com'),
 (21, 'criar.html'),
 (18, 'figma.com'),
+(26, 'https://agenciabrasil.ebc.com.br/direitos-humanos/noticia/2025-08/estudo-aponta-estagnacao-no-saneamento-5-anos-apos-novo-marco-legal?utm_source=chatgpt.com'),
+(23, 'https://agenciabrasil.ebc.com.br/educacao/noticia/2025-09/sete-em-cada-10-alunos-do-ensino-medio-usam-ia-generativa-em-pesquisas?utm_source=chatgpt.com'),
+(24, 'https://agenciabrasil.ebc.com.br/educacao/noticia/2026-03/economia-brasileira-cresce-23-em-2025-revela-ibge?utm_source=chatgpt.com'),
+(27, 'https://agenciabrasil.ebc.com.br/educacao/noticia/2026-08/impacto-das-telas-na-saude-mental-ja-e-debatido-em-80-das-escolas?utm_source=chatgpt.com'),
+(25, 'https://agenciabrasil.ebc.com.br/meio-ambiente/noticia/2025-08/pesquisadores-propoem-estrategias-de-combate-ao-microplastico-no-pais?utm_source=chatgpt.com'),
 (19, 'https://exemplo.com/docs'),
 (20, 'https://google.com'),
 (16, 'https://www.figma.com/'),
 (15, 'https://www.google.com/'),
+(22, 'https://www.google.com/search?sca_esv=3525fe30c2ac1638&sxsrf=AKL5yDgwTT_VBCDD3axFbEfoKlkWrwEd_g:1793183776503&udm=2&fbs=ACAhTvwdifjn2dKXmjtOfBxVFl_koHVe5RLSnJlTH2QYaq_YVdbYfq_upmJPcFgYr-v9gSTVyD5sdmH9TPzYOdGBFKOTmwRHfjznPgw66KUD0uZp7whnXjfFo8CctIJy-hvWAWj'),
 (11, 'localhost.com'),
 (12, 'tiktok.com');
 
@@ -159,17 +145,6 @@ CREATE TABLE `salvos` (
   `iduser` int(11) NOT NULL,
   `idart` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `salvos`
---
-
-INSERT INTO `salvos` (`iduser`, `idart`) VALUES
-(2, 4),
-(2, 26),
-(3, 4),
-(3, 16),
-(3, 17);
 
 -- --------------------------------------------------------
 
@@ -224,7 +199,8 @@ INSERT INTO `usuario` (`iduser`, `nome`, `email`, `senha`, `tipo`, `foto_perfil`
 (6, 'Tsuki', 'tsukii@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$uKRGWY1N5EUhMvHoC12d9w$wpkssGG99lv2GOha+pNjhWTNvxVKmjDEz5wV3OgzQ/c', 0, 'template-perfil.jpg'),
 (8, 'Suzukax', 'suzukax@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$zqmduqoE4qheVTLyX9R4Bw$/XeeUCSlW5pZzmND4WF0oV5zBiHI8nL6f/i3DgBT78s', 0, 'template-perfil.jpg'),
 (9, 'Arthur', 'arthur@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$LjhcBQqnW8rQNFcG5vOLTQ$wO6GJ2IaFC406SA9VVDSYSDhm+03y0WKmrgOrkgVcPE', 0, '05d20b0e-2a2a-4459-9fa0-8598f831a142.jpg'),
-(10, 'Yukimiya', 'yukimiya@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$VFnnShYHQUZ5p5GK3eOCDQ$CVESIBI3SJ8xZZeNFFLMnA0BeBJnwQe6mwZYTh77Bj4', 0, '51232554-7bac-4bc3-9743-d3e3bfc1346f.jpg');
+(10, 'Yukimiya', 'yukimiya@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$VFnnShYHQUZ5p5GK3eOCDQ$CVESIBI3SJ8xZZeNFFLMnA0BeBJnwQe6mwZYTh77Bj4', 0, '51232554-7bac-4bc3-9743-d3e3bfc1346f.jpg'),
+(11, 'edu', 'edugold697@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$54rE0Cn4zivhpXikMsyawA$6WHiOyZqnNs2lAae83EluCpqAuVRFtxWeb2ILYhGFOk', 0, '81c112a8-b093-4000-ac02-644a801ddeec.webp');
 
 --
 -- Índices para tabelas despejadas
@@ -288,13 +264,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `artigos`
 --
 ALTER TABLE `artigos`
-  MODIFY `idart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `idart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de tabela `fontes`
 --
 ALTER TABLE `fontes`
-  MODIFY `idfont` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `idfont` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de tabela `tags`
@@ -306,7 +282,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Restrições para tabelas despejadas

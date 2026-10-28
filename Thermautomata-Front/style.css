@@ -2714,3 +2714,175 @@ input[type="password"]::-ms-clear {
         margin: 4px 0;
     }
 }
+
+
+/* =======================================================
+   ARTIGOS SALVOS
+======================================================= */
+
+.pagina-salvos {
+    padding-bottom: 60px;
+}
+
+.salvos-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.salvos-cabecalho h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.salvos-cabecalho p {
+    margin: 8px 0 0;
+    color: #777;
+    font-size: 15px;
+}
+
+.salvos-voltar-lista,
+.btn-abrir-salvo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #222;
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.salvos-voltar-lista:hover,
+.btn-abrir-salvo:hover {
+    background: #444;
+    color: #fff;
+}
+
+.mensagem-salvos {
+    margin: 20px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.mensagem-salvos.vazio {
+    padding: 35px 24px;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+    background: #fafafa;
+    text-align: center;
+}
+
+.mensagem-salvos.erro {
+    color: #b42318;
+}
+
+.lista-artigos-salvos {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card-artigo-salvo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 24px;
+    border: 1px solid #e2e2e2;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.045);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-artigo-salvo:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.card-salvo-conteudo {
+    min-width: 0;
+    flex: 1;
+}
+
+.card-salvo-data {
+    margin: 0 0 7px;
+    color: #888;
+    font-size: 12px;
+}
+
+.card-salvo-conteudo h2 {
+    margin: 0 0 7px;
+    font-size: 20px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.card-salvo-autor {
+    margin: 0 0 10px;
+    color: #666;
+    font-size: 13px;
+}
+
+.card-salvo-resumo {
+    margin: 0;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.card-salvo-acoes {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 9px;
+}
+
+.btn-remover-salvo {
+    padding: 9px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #555;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-remover-salvo:hover {
+    border-color: #c7c7c7;
+    background: #f5f5f5;
+}
+
+.btn-remover-salvo:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+/* Adaptação para celulares e telas menores */
+@media (max-width: 700px) {
+    .salvos-cabecalho {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .card-artigo-salvo {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .card-salvo-acoes {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}

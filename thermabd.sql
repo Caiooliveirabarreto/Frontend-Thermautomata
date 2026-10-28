@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 28/10/2026 às 11:58
+-- Tempo de geração: 28/10/2026 às 12:32
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -43,7 +43,7 @@ CREATE TABLE `artigos` (
 INSERT INTO `artigos` (`idart`, `titulo`, `artigo`, `iduser`, `status`, `data_criacao`) VALUES
 (28, 'Inteligência artificial na educação', 'A inteligência artificial generativa passou a fazer parte da rotina de muitos estudantes brasileiros. Segundo uma pesquisa divulgada pelo Centro Regional de Estudos para o Desenvolvimento da Sociedade da Informação (Cetic.br), sete em cada dez alunos do ensino médio que utilizam a internet recorrem a ferramentas de inteligência artificial, como ChatGPT e Gemini, para realizar pesquisas escolares.\n\nApesar da popularização dessas tecnologias, a pesquisa apontou que apenas 32% dos estudantes receberam orientação escolar sobre como utilizá-las. Esse cenário evidencia a importância de ensinar os jovens a verificar informações, reconhecer possíveis erros nas respostas geradas e utilizar a inteligência artificial de maneira ética e responsável.\n\nA tecnologia pode contribuir para o aprendizado, facilitar a compreensão de conteúdos e ajudar na organização de pesquisas. Entretanto, seu uso deve complementar o desenvolvimento do raciocínio crítico, e não substituir a leitura, a interpretação e a produção de conhecimento pelos próprios estudantes.', 3, 'aprovado', '2026-10-28 07:52:29'),
 (29, 'Crescimento da economia brasileira', 'A economia brasileira registrou crescimento de 2,3% em 2025, de acordo com os dados divulgados pelo Instituto Brasileiro de Geografia e Estatística (IBGE). Com esse resultado, o país completou cinco anos consecutivos de expansão econômica. No quarto trimestre do ano, entretanto, a variação foi de apenas 0,1% em comparação com o trimestre anterior.\n\nO Produto Interno Bruto (PIB), indicador que representa o valor dos bens e serviços finais produzidos em um país, alcançou R$ 12,7 trilhões em valores correntes. Esse indicador é utilizado para acompanhar o desempenho da economia e avaliar mudanças na atividade produtiva.\n\nO crescimento econômico pode estar relacionado a fatores como consumo das famílias, investimentos, produção industrial e desempenho dos serviços. Apesar de ser um indicador importante, o aumento do PIB não significa necessariamente que todos os brasileiros tenham experimentado uma melhora equivalente na renda ou nas condições de vida.\n\nPor isso, a análise da economia também exige observar a distribuição de renda, o emprego, a inflação e o acesso da população a serviços essenciais.', 3, 'aprovado', '2026-10-28 07:53:05'),
-(30, 'Poluição por microplásticos', 'A contaminação por microplásticos representa um desafio ambiental que exige ações coordenadas entre governos, empresas, pesquisadores e população. Um relatório da Academia Brasileira de Ciências analisou os impactos desses pequenos fragmentos de plástico e apresentou estratégias para reduzir sua presença no meio ambiente.\n\nDe acordo com os dados apresentados pela Agência Brasil, o Brasil contribui anualmente com até 190 mil toneladas de lixo no ambiente marinho. Mundialmente, são produzidas aproximadamente 400 milhões de toneladas de plástico por ano, das quais menos de 10% são recicladas.\n\nGrande parte dos resíduos plásticos que chega aos oceanos tem origem em atividades realizadas em terra, incluindo o turismo, a indústria, a ocupação urbana desordenada e a gestão inadequada dos resíduos sólidos.\n\nO enfrentamento desse problema depende de medidas como melhorar a coleta seletiva, ampliar a reciclagem, reduzir o consumo de plásticos descartáveis e aperfeiçoar as políticas de gerenciamento de resíduos. Além disso, a conscientização ambiental é fundamental para incentivar hábitos de consumo mais responsáveis e proteger os ecossistemas aquáticos.', 2, 'pendente', '2026-10-28 07:54:12'),
+(30, 'Poluição por microplásticos', 'A contaminação por microplásticos representa um desafio ambiental que exige ações coordenadas entre governos, empresas, pesquisadores e população. Um relatório da Academia Brasileira de Ciências analisou os impactos desses pequenos fragmentos de plástico e apresentou estratégias para reduzir sua presença no meio ambiente.\n\nDe acordo com os dados apresentados pela Agência Brasil, o Brasil contribui anualmente com até 190 mil toneladas de lixo no ambiente marinho. Mundialmente, são produzidas aproximadamente 400 milhões de toneladas de plástico por ano, das quais menos de 10% são recicladas.\n\nGrande parte dos resíduos plásticos que chega aos oceanos tem origem em atividades realizadas em terra, incluindo o turismo, a indústria, a ocupação urbana desordenada e a gestão inadequada dos resíduos sólidos.\n\nO enfrentamento desse problema depende de medidas como melhorar a coleta seletiva, ampliar a reciclagem, reduzir o consumo de plásticos descartáveis e aperfeiçoar as políticas de gerenciamento de resíduos. Além disso, a conscientização ambiental é fundamental para incentivar hábitos de consumo mais responsáveis e proteger os ecossistemas aquáticos.', 2, 'aprovado', '2026-10-28 07:54:12'),
 (31, 'Saneamento básico e infraestrutura', 'O acesso ao saneamento básico continua sendo um desafio importante no Brasil. Cinco anos após a entrada em vigor do novo Marco Legal do Saneamento Básico, um estudo divulgado pelo Instituto Trata Brasil apontou que os indicadores do setor não apresentaram avanços significativos.\n\nSegundo os dados apresentados pela Agência Brasil, aproximadamente 34 milhões de pessoas ainda não tinham acesso a sistemas formais de abastecimento de água, enquanto mais de 90 milhões não contavam com coleta e tratamento de esgoto.\n\nA ausência desses serviços pode provocar consequências para a saúde pública, aumentar a contaminação de rios e solos e ampliar as desigualdades entre regiões e grupos sociais. Comunidades sem infraestrutura adequada ficam mais expostas a doenças relacionadas à água contaminada e a condições sanitárias precárias.\n\nPara enfrentar o problema, é necessário ampliar os investimentos, melhorar a gestão dos serviços e fortalecer o planejamento das obras de saneamento. A universalização do abastecimento de água e do tratamento de esgoto também depende da fiscalização das metas e da cooperação entre governos, prestadores de serviços e sociedade.', 2, 'pendente', '2026-10-28 07:54:52'),
 (32, 'Saúde mental e uso de telas nas escolas', 'O impacto das tecnologias digitais na saúde mental dos estudantes tornou-se um tema cada vez mais presente nas escolas brasileiras. Uma pesquisa TIC Educação 2025, realizada pelo Centro Regional de Estudos para o Desenvolvimento da Sociedade da Informação (Cetic.br), indicou que 80% das instituições de ensino fundamental e médio discutiram o assunto em 2025. Em 2024, esse percentual era de 62%.\n\nO aumento mostra que as instituições de ensino estão dando mais atenção às possíveis consequências do uso de dispositivos digitais entre crianças e adolescentes. Celulares, computadores e tablets podem facilitar o acesso à informação e apoiar atividades pedagógicas, mas seu uso excessivo ou inadequado também pode levantar preocupações relacionadas ao bem-estar e à rotina dos estudantes.\n\nNesse contexto, a escola e a família desempenham papéis importantes na orientação dos jovens. Conversas sobre hábitos digitais, equilíbrio entre atividades on-line e presenciais e uso responsável da tecnologia podem contribuir para uma relação mais saudável com as telas.\n\nO debate também reforça a importância de desenvolver estratégias educacionais que aproveitem os benefícios dos recursos digitais sem ignorar seus possíveis efeitos sobre a saúde e o aprendizado.', 2, 'pendente', '2026-10-28 07:55:43');
 
@@ -146,6 +146,13 @@ CREATE TABLE `salvos` (
   `idart` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `salvos`
+--
+
+INSERT INTO `salvos` (`iduser`, `idart`) VALUES
+(3, 29);
+
 -- --------------------------------------------------------
 
 --
@@ -200,7 +207,9 @@ INSERT INTO `usuario` (`iduser`, `nome`, `email`, `senha`, `tipo`, `foto_perfil`
 (8, 'Suzukax', 'suzukax@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$zqmduqoE4qheVTLyX9R4Bw$/XeeUCSlW5pZzmND4WF0oV5zBiHI8nL6f/i3DgBT78s', 0, 'template-perfil.jpg'),
 (9, 'Arthur', 'arthur@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$LjhcBQqnW8rQNFcG5vOLTQ$wO6GJ2IaFC406SA9VVDSYSDhm+03y0WKmrgOrkgVcPE', 0, '05d20b0e-2a2a-4459-9fa0-8598f831a142.jpg'),
 (10, 'Yukimiya', 'yukimiya@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$VFnnShYHQUZ5p5GK3eOCDQ$CVESIBI3SJ8xZZeNFFLMnA0BeBJnwQe6mwZYTh77Bj4', 0, '51232554-7bac-4bc3-9743-d3e3bfc1346f.jpg'),
-(11, 'edu', 'edugold697@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$54rE0Cn4zivhpXikMsyawA$6WHiOyZqnNs2lAae83EluCpqAuVRFtxWeb2ILYhGFOk', 0, '81c112a8-b093-4000-ac02-644a801ddeec.webp');
+(11, 'edu', 'edugold697@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$54rE0Cn4zivhpXikMsyawA$6WHiOyZqnNs2lAae83EluCpqAuVRFtxWeb2ILYhGFOk', 0, '81c112a8-b093-4000-ac02-644a801ddeec.webp'),
+(12, 'Progammer', 'programador@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$d4GBNOa7z7oQoJX8YPCwEA$L33ehPDqBV3rWTK/5elM91Nw/trIdGr+oez7y0pj7sA', 0, '053b0c4b-abee-4e59-a24e-75a9153ba90f.avif'),
+(13, 'Pão', 'pao@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$qgNKtNE3gLW9s+VzAEFNLg$QrpzHSf2wmlr+ZrBiQaUa4HiBLjFpD61Z+iKIVMUH1I', 0, 'template-perfil.jpg');
 
 --
 -- Índices para tabelas despejadas
@@ -282,7 +291,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Restrições para tabelas despejadas

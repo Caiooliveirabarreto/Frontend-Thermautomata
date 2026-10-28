@@ -1,0 +1,389 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <title>Artigos salvos</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <a href="index.html" aria-label="Página inicial">
+                        <img
+                            src="assets/logo.png"
+                            alt="Logo"
+                            class="img-fluid"
+                        >
+                    </a>
+                </div>
+
+                <div class="col-5 align-items-center d-flex justify-content-center desktop-nav-links">
+                    <a href="index.html" class="nav-link-custom">SOBRE</a>
+                    <a href="artigos.html" class="nav-link-custom">ARTIGOS</a>
+                    <a href="download.html" class="nav-link-custom">DOWNLOAD</a>
+                </div>
+
+                <div
+                    class="col-2 align-items-end justify-content-end d-flex"
+                    id="loginButtons"
+                >
+                    <a href="login.html" class="nav-link-custom">LOGIN</a>
+
+                    <button
+                        class="hamburger-btn"
+                        id="hamburgerBtn"
+                        type="button"
+                        aria-label="Abrir menu"
+                        aria-expanded="false"
+                        aria-controls="mobileNavPanel"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+
+            <hr>
+        </nav>
+    </header>
+
+    <!-- Menu lateral para dispositivos móveis -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+    <aside class="mobile-nav-panel" id="mobileNavPanel">
+        <button
+            class="close-btn"
+            id="closeNavBtn"
+            type="button"
+            aria-label="Fechar menu"
+        >
+            &times;
+        </button>
+
+        <nav>
+            <a href="index.html" class="nav-link-custom">SOBRE</a>
+            <a href="artigos.html" class="nav-link-custom">ARTIGOS</a>
+            <a href="download.html" class="nav-link-custom">DOWNLOAD</a>
+            <a href="salvos.html" class="nav-link-custom">ARTIGOS SALVOS</a>
+
+            <a
+                href="admin.html"
+                class="nav-link-custom"
+                id="mobileAdminLink"
+                hidden
+            >
+                PAINEL
+            </a>
+
+            <a href="meus-artigos.html" class="nav-link-custom">
+                MEUS ARTIGOS
+            </a>
+
+            <a href="salvos.html" class="nav-link-custom">
+                ARTIGOS SALVOS
+            </a>
+
+            <a href="login.html" class="login-btn-mobile" id="mobileAuthAction">
+                LOGIN
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Conteúdo principal -->
+    <main class="container mt-5 pagina-salvos">
+
+        <div class="salvos-cabecalho">
+            <div>
+                <h1>Artigos salvos</h1>
+
+                <p>
+                    Reúna aqui os artigos que você marcou para ler depois.
+                </p>
+            </div>
+
+            <a href="artigos.html" class="salvos-voltar-lista">
+                Explorar artigos
+            </a>
+        </div>
+
+        <hr class="admin-divisor">
+
+        <div
+            id="mensagemSalvos"
+            class="mensagem-salvos"
+            role="status"
+            aria-live="polite"
+        >
+            Carregando seus artigos salvos...
+        </div>
+
+        <div
+            id="listaArtigosSalvos"
+            class="lista-artigos-salvos"
+        ></div>
+
+    </main>
+
+    <!-- Script geral do site -->
+    <script src="script.js"></script>
+
+    <!-- Lógica da página de artigos salvos -->
+    <script>
+        const API_ARTIGOS = "http://127.0.0.1:8000/artigos";
+
+        const listaSalvos = document.getElementById(
+            "listaArtigosSalvos"
+        );
+
+        const mensagemSalvos = document.getElementById(
+            "mensagemSalvos"
+        );
+
+        // Evita que textos recebidos da API sejam interpretados como HTML.
+        function escaparHTML(valor) {
+            return String(valor ?? "").replace(/[&<>"']/g, function (caractere) {
+                return {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                }[caractere];
+            });
+        }
+
+        // Formata a data para o padrão brasileiro.
+        function dataFormatada(valor) {
+            if (!valor) {
+                return "Data não informada";
+            }
+
+            const data = new Date(valor);
+
+            return Number.isNaN(data.getTime())
+                ? "Data não informada"
+                : data.toLocaleDateString("pt-BR");
+        }
+
+        // Exibe mensagens de carregamento, erro ou lista vazia.
+        function mostrarMensagem(texto, tipo = "info") {
+            mensagemSalvos.textContent = texto;
+            mensagemSalvos.className = "mensagem-salvos " + tipo;
+            mensagemSalvos.hidden = !texto;
+        }
+
+        // Busca os artigos salvos pelo usuário conectado.
+        async function carregarArtigosSalvos() {
+            const token = localStorage.getItem("token");
+
+            // O usuário precisa estar autenticado.
+            if (!token) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                const resposta = await fetch(
+                    `${API_ARTIGOS}/salvos`,
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+
+                // Se a autenticação não for válida, volta ao login.
+                if (
+                    resposta.status === 401 ||
+                    resposta.status === 403
+                ) {
+                    localStorage.removeItem("token");
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        "Não foi possível carregar seus artigos salvos."
+                    );
+                }
+
+                const artigos = await resposta.json();
+
+                listaSalvos.innerHTML = "";
+
+                // Mensagem exibida quando não existem artigos salvos.
+                if (!Array.isArray(artigos) || artigos.length === 0) {
+                    mostrarMensagem(
+                        "Você ainda não salvou nenhum artigo. Explore a lista de artigos e toque em Salvar para guardá-los aqui.",
+                        "vazio"
+                    );
+
+                    return;
+                }
+
+                mostrarMensagem(
+                    `${artigos.length} artigo${artigos.length === 1 ? " salvo" : "s salvos"} na sua lista.`,
+                    "info"
+                );
+
+                // Cria um cartão para cada artigo retornado pela API.
+                artigos.forEach(function (artigo) {
+                    const card = document.createElement("article");
+
+                    card.className = "card-artigo-salvo";
+
+                    const texto = String(
+                        artigo.artigo || ""
+                    ).replace(/\s+/g, " ").trim();
+
+                    const resumo = texto.length > 240
+                        ? texto.slice(0, 240).trimEnd() + "…"
+                        : texto;
+
+                    card.innerHTML = `
+                        <div class="card-salvo-conteudo">
+
+                            <p class="card-salvo-data">
+                                Salvo na sua lista ·
+                                ${escaparHTML(dataFormatada(artigo.data_criacao))}
+                            </p>
+
+                            <h2>
+                                ${escaparHTML(artigo.titulo || "Artigo sem título")}
+                            </h2>
+
+                            <p class="card-salvo-autor">
+                                Por ${escaparHTML(artigo.nome_autor || "Autor não informado")}
+                            </p>
+
+                            <p class="card-salvo-resumo">
+                                ${escaparHTML(resumo || "Este artigo não possui um resumo disponível.")}
+                            </p>
+
+                        </div>
+
+                        <div class="card-salvo-acoes">
+
+                            <a
+                                class="btn-abrir-salvo"
+                                href="artigo.html?id=${encodeURIComponent(artigo.idart)}"
+                            >
+                                Ler artigo
+                            </a>
+
+                            <button
+                                class="btn-remover-salvo"
+                                type="button"
+                                data-id-artigo="${escaparHTML(artigo.idart)}"
+                            >
+                                Remover dos salvos
+                            </button>
+
+                        </div>
+                    `;
+
+                    listaSalvos.appendChild(card);
+                });
+
+            } catch (erro) {
+                console.error(
+                    "Erro ao carregar artigos salvos:",
+                    erro
+                );
+
+                mostrarMensagem(
+                    "Ocorreu um erro ao carregar seus artigos. Confira se o servidor da API está em execução e tente novamente.",
+                    "erro"
+                );
+            }
+        }
+
+        // Trata os cliques no botão de remover.
+        listaSalvos.addEventListener("click", async function (evento) {
+            const botao = evento.target.closest(
+                ".btn-remover-salvo"
+            );
+
+            if (!botao) {
+                return;
+            }
+
+            const idArtigo = botao.dataset.idArtigo;
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            botao.disabled = true;
+            botao.textContent = "Removendo...";
+
+            try {
+                const resposta = await fetch(
+                    `${API_ARTIGOS}/salvar/${encodeURIComponent(idArtigo)}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const resultado = await resposta.json().catch(
+                    () => ({})
+                );
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        resultado.detail ||
+                        "Não foi possível remover o artigo."
+                    );
+                }
+
+                // Atualiza a lista depois da remoção.
+                await carregarArtigosSalvos();
+
+            } catch (erro) {
+                console.error(
+                    "Erro ao remover artigo salvo:",
+                    erro
+                );
+
+                mostrarMensagem(
+                    erro.message || "Não foi possível remover o artigo.",
+                    "erro"
+                );
+
+                botao.disabled = false;
+                botao.textContent = "Remover dos salvos";
+            }
+        });
+
+        // Inicia o carregamento da página.
+        carregarArtigosSalvos();
+    </script>
+</body>
+</html>

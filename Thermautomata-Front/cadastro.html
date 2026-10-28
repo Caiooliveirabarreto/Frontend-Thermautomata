@@ -130,9 +130,25 @@
                     return;
                 }
 
+                // Confirma que a API retornou o token de autenticação.
+                if (!resultado.token) {
+                    console.error("A API não retornou um token:", resultado);
+
+                    mostrarNotificacao(
+                        "Conta criada, mas não foi possível iniciar a sessão. Entre pela tela de login.",
+                        "aviso"
+                    );
+
+                    window.location.replace("login.html");
+                    return;
+                }
+
+                // Salva a sessão do usuário.
                 localStorage.setItem("token", resultado.token);
-                mostrarNotificacao("Conta criada com sucesso!");
-                window.location.href = "index.html";
+
+                // Redireciona diretamente para a página inicial.
+                window.location.replace("./index.html");
+                return;
 
             } catch (erro) {
                 console.error("Erro:", erro);

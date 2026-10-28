@@ -1,5 +1,6 @@
-// Função para abrir e fechar o menu lateral mobile
-(function () {
+
+ // Função para abrir e fechar o menu lateral mobile
+ (function () {
     const body = document.body;
 
     function fecharMenu() {
@@ -328,6 +329,10 @@ async function verificarLogin() {
                         Meus artigos
                     </button>
 
+                    <button id="btnArtigosSalvos" type="button">
+                        Artigos salvos
+                    </button>
+
                     ${Number(usuario.tipo) === 1 ? `
                         <button id="btnPainelAdmin" type="button">
                             Painel administrativo
@@ -382,6 +387,15 @@ async function verificarLogin() {
         if (btnMeusArtigos) {
             btnMeusArtigos.addEventListener("click", function () {
                 window.location.href = "meus-artigos.html";
+            });
+        }
+
+        // Artigos salvos do usuário.
+        const btnArtigosSalvos = document.getElementById("btnArtigosSalvos");
+
+        if (btnArtigosSalvos) {
+            btnArtigosSalvos.addEventListener("click", function () {
+                window.location.href = "salvos.html";
             });
         }
 

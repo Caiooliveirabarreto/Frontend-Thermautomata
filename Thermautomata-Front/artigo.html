@@ -117,7 +117,14 @@
                     <div class="cabecalho-artigo">
                         <div>
                             <h1>${artigo.titulo}</h1>
-                            <h3>${artigo.nome_autor}</h3>
+                            <h3>
+                                <a
+                                    class="link-perfil-autor"
+                                    href="perfil.html?id=${encodeURIComponent(artigo.iduser)}"
+                                >
+                                    ${artigo.nome_autor}
+                                </a>
+                            </h3>
                             <p>${new Date(artigo.data_criacao).toLocaleDateString("pt-BR")}</p>
                         </div>
 

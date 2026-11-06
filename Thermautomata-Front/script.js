@@ -90,15 +90,53 @@
 function atualizarMenuMobile(usuario) {
     const painel = document.getElementById("mobileAdminLink");
     const acaoLogin = document.getElementById("mobileAuthAction");
+    const menu = document.querySelector("#mobileNavPanel nav");
 
-    // O PAINEL aparece apenas para administradores.
+    // Cria o link Meu Perfil caso ainda não exista.
+    let linkPerfil = document.getElementById("mobileProfileLink");
+
+    if (menu && !linkPerfil) {
+        linkPerfil = document.createElement("a");
+
+        linkPerfil.href = "perfil.html";
+        linkPerfil.className = "nav-link-custom";
+        linkPerfil.id = "mobileProfileLink";
+        linkPerfil.textContent = "MEU PERFIL";
+
+        const linkDownload = menu.querySelector(
+            'a[href="download.html"]'
+        );
+
+        if (linkDownload) {
+            linkDownload.insertAdjacentElement(
+                "afterend",
+                linkPerfil
+            );
+        } else {
+            menu.appendChild(linkPerfil);
+        }
+    }
+
+    if (linkPerfil) {
+        linkPerfil.hidden = !usuario;
+    }
+
+    // Os atalhos antigos serão acessados pelo perfil.
+    if (menu) {
+        menu.querySelectorAll(
+            'a[href="meus-artigos.html"], a[href="salvos.html"]'
+        ).forEach(function (link) {
+            link.hidden = true;
+        });
+    }
+
+    // Painel administrativo apenas para administradores.
     if (painel) {
         painel.hidden = !(usuario && Number(usuario.tipo) === 1);
     }
 
     if (!acaoLogin) return;
 
-    // Limpa o evento anterior para evitar duplicações.
     acaoLogin.onclick = null;
 
     if (usuario) {
@@ -199,7 +237,16 @@ async function carregarArtigos(tagsSelecionadas = [], autor = "") {
 
             const autorElemento = document.createElement("h3");
             autorElemento.className = "autor";
-            autorElemento.textContent = artigo.nome_autor;
+
+            const linkAutor = document.createElement("a");
+
+            linkAutor.className = "link-perfil-autor";
+            linkAutor.href =
+                `perfil.html?id=${encodeURIComponent(artigo.iduser)}`;
+
+            linkAutor.textContent = artigo.nome_autor;
+
+            autorElemento.appendChild(linkAutor);
 
             const dataElemento = document.createElement("p");
             dataElemento.className = "data-artigo";
@@ -325,12 +372,9 @@ async function verificarLogin() {
                 >
 
                 <div class="perfil-dropdown" id="perfilDropdown">
-                    <button id="btnMeusArtigos" type="button">
-                        Meus artigos
-                    </button>
 
-                    <button id="btnArtigosSalvos" type="button">
-                        Artigos salvos
+                    <button id="btnMeuPerfil" type="button">
+                        Meu perfil
                     </button>
 
                     ${Number(usuario.tipo) === 1 ? `
@@ -342,6 +386,7 @@ async function verificarLogin() {
                     <button id="btnLogout" type="button">
                         Sair
                     </button>
+
                 </div>
             </div>
 
@@ -381,21 +426,12 @@ async function verificarLogin() {
             });
         }
 
-        // Meus artigos.
-        const btnMeusArtigos = document.getElementById("btnMeusArtigos");
+        // Acessar o perfil do usuário.
+        const btnMeuPerfil = document.getElementById("btnMeuPerfil");
 
-        if (btnMeusArtigos) {
-            btnMeusArtigos.addEventListener("click", function () {
-                window.location.href = "meus-artigos.html";
-            });
-        }
-
-        // Artigos salvos do usuário.
-        const btnArtigosSalvos = document.getElementById("btnArtigosSalvos");
-
-        if (btnArtigosSalvos) {
-            btnArtigosSalvos.addEventListener("click", function () {
-                window.location.href = "salvos.html";
+        if (btnMeuPerfil) {
+            btnMeuPerfil.addEventListener("click", function () {
+                window.location.href = "perfil.html";
             });
         }
 
@@ -472,3 +508,577 @@ function mostrarNotificacao(mensagem, tipo = "sucesso") {
         notificacao.classList.remove("visivel");
     }, 3500);
 }
+
+// ======================================================
+// PÁGINA DE PERFIL
+// ======================================================
+
+(function inicializarPaginaPerfil() {
+
+    const paginaPerfil = document.querySelector(".pagina-perfil");
+
+    // Não executa em outras páginas do site.
+    if (!paginaPerfil) return;
+
+    const API = "http://127.0.0.1:8000";
+
+    const foto = document.getElementById("perfilFoto");
+    const nome = document.getElementById("perfilNome");
+    const descricao = document.getElementById("perfilDescricao");
+    const totalArtigos = document.getElementById("perfilTotalArtigos");
+
+    const abas = document.getElementById("perfilAbas");
+    const mensagem = document.getElementById("perfilMensagem");
+    const lista = document.getElementById("listaPerfilArtigos");
+
+    let artigosEscritos = [];
+    let artigosFavoritos = [];
+
+
+    // Faz requisições à API.
+    async function requisitarAPI(url, token = null) {
+        const opcoes = {};
+
+        if (token) {
+            opcoes.headers = {
+                Authorization: `Bearer ${token}`
+            };
+        }
+
+        const resposta = await fetch(url, opcoes);
+        const dados = await resposta.json().catch(() => ({}));
+
+        if (!resposta.ok) {
+            throw new Error(
+                dados.detail || "Não foi possível carregar as informações."
+            );
+        }
+
+        return dados;
+    }
+
+
+    // Formata datas.
+    function formatarData(valor) {
+        if (!valor) return "Data não informada";
+
+        const data = new Date(valor);
+
+        if (Number.isNaN(data.getTime())) {
+            return "Data não informada";
+        }
+
+        return data.toLocaleDateString("pt-BR");
+    }
+
+
+    // Cria elementos de texto sem interpretar o conteúdo como HTML.
+    function criarTexto(tag, classe, conteudo) {
+        const elemento = document.createElement(tag);
+
+        if (classe) {
+            elemento.className = classe;
+        }
+
+        elemento.textContent = conteudo || "";
+
+        return elemento;
+    }
+
+
+    // Cria um link para o perfil de um autor.
+    function criarLinkAutor(idUsuario, nomeAutor) {
+        const link = document.createElement("a");
+
+        link.className = "link-perfil-autor";
+        link.href = `perfil.html?id=${encodeURIComponent(idUsuario)}`;
+        link.textContent = nomeAutor || "Autor não informado";
+
+        return link;
+    }
+
+
+    // Exibe mensagens na página.
+    function exibirMensagem(texto, tipo = "") {
+        mensagem.textContent = texto;
+        mensagem.className = "perfil-mensagem";
+
+        if (tipo) {
+            mensagem.classList.add(tipo);
+        }
+
+        mensagem.hidden = !texto;
+    }
+
+
+    // Atualiza o cabeçalho do perfil.
+    function preencherPerfil(perfil, proprio) {
+        nome.textContent = perfil.nome || "Usuário";
+
+        descricao.textContent = proprio
+            ? "Este é o seu perfil no Thermautomata."
+            : "Perfil de autor no Thermautomata.";
+
+        totalArtigos.textContent = perfil.total_artigos ?? 0;
+
+        const fotoUsuario =
+            perfil.foto_perfil ||
+            perfil.foto ||
+            "template-perfil.jpg";
+
+        foto.src =
+            `${API}/uploads/perfis/${encodeURIComponent(fotoUsuario)}`;
+
+        foto.onerror = function () {
+            foto.onerror = null;
+
+            foto.src =
+                `${API}/uploads/perfis/template-perfil.jpg`;
+        };
+    }
+
+
+    // Cria um cartão para os artigos escritos.
+    function criarCartaoEscrito(artigo, publico = false) {
+        const card = document.createElement("article");
+        card.className = "meu-artigo";
+
+        const conteudo = document.createElement("div");
+        conteudo.className = "meu-artigo-conteudo";
+
+        const titulo = document.createElement("h2");
+        const linkTitulo = document.createElement("a");
+
+        linkTitulo.href =
+            `artigo.html?id=${encodeURIComponent(artigo.idart)}`;
+
+        linkTitulo.textContent =
+            artigo.titulo || "Artigo sem título";
+
+        titulo.appendChild(linkTitulo);
+        conteudo.appendChild(titulo);
+
+        const status = artigo.status || "aprovado";
+        const publicado = status === "aprovado";
+
+        const dataExibida = publicado
+            ? (artigo.data_publicacao || artigo.data_criacao)
+            : artigo.data_criacao;
+
+        const textoData = publicado
+            ? "Publicado em: "
+            : "Enviado em: ";
+
+        conteudo.appendChild(
+            criarTexto(
+                "p",
+                "meu-artigo-data",
+                textoData + formatarData(dataExibida)
+            )
+        );
+
+        const texto = String(
+            artigo.resumo || artigo.artigo || ""
+        ).replace(/\s+/g, " ").trim();
+
+        const resumo = texto.length > 220
+            ? texto.slice(0, 220).trimEnd() + "..."
+            : texto;
+
+        conteudo.appendChild(
+            criarTexto(
+                "p",
+                "perfil-resumo",
+                resumo || "Nenhuma descrição disponível."
+            )
+        );
+
+        card.appendChild(conteudo);
+
+        // No perfil próprio, exibe os status dos artigos.
+        if (!publico) {
+            const acoes = document.createElement("div");
+            acoes.className = "meu-artigo-acoes";
+
+            const classeStatus = {
+                aprovado: "status-aprovado",
+                pendente: "status-pendente",
+                rejeitado: "status-rejeitado"
+            };
+
+            const textoStatus = {
+                aprovado: "Publicado",
+                pendente: "Pendente",
+                rejeitado: "Rejeitado"
+            };
+
+            const etiqueta = document.createElement("span");
+
+            etiqueta.className =
+                `status-artigo ${classeStatus[status] || ""}`;
+
+            etiqueta.textContent =
+                textoStatus[status] || status;
+
+            acoes.appendChild(etiqueta);
+
+            const botao = document.createElement("a");
+
+            botao.className = "btn-visualizar";
+            botao.href =
+                `artigo.html?id=${encodeURIComponent(artigo.idart)}`;
+
+            botao.textContent = "VISUALIZAR";
+
+            acoes.appendChild(botao);
+            card.appendChild(acoes);
+        }
+
+        return card;
+    }
+
+
+    // Cria um cartão para os artigos favoritados.
+    function criarCartaoFavorito(artigo) {
+        const card = document.createElement("article");
+        card.className = "card-artigo-salvo";
+
+        const conteudo = document.createElement("div");
+        conteudo.className = "card-salvo-conteudo";
+
+        const data = artigo.data_publicacao || artigo.data_criacao;
+
+        conteudo.appendChild(
+            criarTexto(
+                "p",
+                "card-salvo-data",
+                `Publicado em: ${formatarData(data)}`
+            )
+        );
+
+        // Título do artigo.
+        const titulo = document.createElement("h2");
+        const linkTitulo = document.createElement("a");
+
+        linkTitulo.href =
+            `artigo.html?id=${encodeURIComponent(artigo.idart)}`;
+
+        linkTitulo.textContent =
+            artigo.titulo || "Artigo sem título";
+
+        titulo.appendChild(linkTitulo);
+        conteudo.appendChild(titulo);
+
+        // Nome do autor com link para o perfil.
+        const autor = document.createElement("p");
+        autor.className = "card-salvo-autor";
+
+        autor.append("Por ");
+
+        autor.appendChild(
+            criarLinkAutor(artigo.iduser, artigo.nome_autor)
+        );
+
+        conteudo.appendChild(autor);
+
+        // Resumo do artigo.
+        const texto = String(
+            artigo.resumo || artigo.artigo || ""
+        ).replace(/\s+/g, " ").trim();
+
+        const resumo = texto.length > 220
+            ? texto.slice(0, 220).trimEnd() + "..."
+            : texto;
+
+        conteudo.appendChild(
+            criarTexto(
+                "p",
+                "card-salvo-resumo",
+                resumo || "Nenhuma descrição disponível."
+            )
+        );
+
+        card.appendChild(conteudo);
+
+        // Botões de ação.
+        const acoes = document.createElement("div");
+        acoes.className = "card-salvo-acoes";
+
+        // Abrir artigo.
+        const botaoLer = document.createElement("a");
+
+        botaoLer.className = "btn-abrir-salvo";
+        botaoLer.href =
+            `artigo.html?id=${encodeURIComponent(artigo.idart)}`;
+
+        botaoLer.textContent = "Ler artigo";
+
+        acoes.appendChild(botaoLer);
+
+        // Remover dos favoritos.
+        const botaoRemover = document.createElement("button");
+
+        botaoRemover.className = "btn-remover-salvo";
+        botaoRemover.type = "button";
+        botaoRemover.dataset.idArtigo = artigo.idart;
+        botaoRemover.textContent = "Remover dos favoritos";
+
+        acoes.appendChild(botaoRemover);
+
+        card.appendChild(acoes);
+
+        return card;
+    }
+
+
+    // Mostra uma lista de artigos na página.
+    function exibirArtigos(artigos, tipo) {
+        lista.innerHTML = "";
+
+        if (!Array.isArray(artigos) || artigos.length === 0) {
+            let texto = "Nenhum artigo encontrado.";
+
+            if (tipo === "escritos") {
+                texto = "Você ainda não escreveu nenhum artigo.";
+            } else if (tipo === "favoritos") {
+                texto = "Você ainda não favoritou nenhum artigo.";
+            } else if (tipo === "publicos") {
+                texto = "Este usuário ainda não publicou artigos.";
+            }
+
+            exibirMensagem(texto, "vazio");
+            return;
+        }
+
+        exibirMensagem("");
+
+        artigos.forEach(function (artigo) {
+            let card;
+
+            if (tipo === "favoritos") {
+                card = criarCartaoFavorito(artigo);
+            } else {
+                card = criarCartaoEscrito(
+                    artigo,
+                    tipo === "publicos"
+                );
+            }
+
+            lista.appendChild(card);
+        });
+    }
+
+
+    // Troca entre as abas do perfil próprio.
+    function trocarAba(abaSelecionada) {
+        document.querySelectorAll(".perfil-aba").forEach(function (aba) {
+            const selecionada =
+                aba.dataset.aba === abaSelecionada;
+
+            aba.classList.toggle("ativa", selecionada);
+            aba.setAttribute(
+                "aria-selected",
+                String(selecionada)
+            );
+        });
+
+        if (abaSelecionada === "escritos") {
+            exibirArtigos(artigosEscritos, "escritos");
+        } else {
+            exibirArtigos(artigosFavoritos, "favoritos");
+        }
+    }
+
+
+    // Inicializa a página.
+    async function carregarPerfil() {
+        const parametros = new URLSearchParams(window.location.search);
+        const idParametro = parametros.get("id");
+        const token = localStorage.getItem("token");
+
+        let usuarioLogado = null;
+        let idUsuario;
+
+        try {
+            // Verifica se existe um usuário autenticado.
+            if (token) {
+                try {
+                    usuarioLogado = await requisitarAPI(
+                        `${API}/auth/me`,
+                        token
+                    );
+                } catch (erro) {
+                    localStorage.removeItem("token");
+                    usuarioLogado = null;
+                }
+            }
+
+            // Sem ID na URL, abre o perfil do usuário logado.
+            if (!idParametro) {
+                if (!usuarioLogado) {
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                idUsuario = Number(usuarioLogado.iduser);
+
+            } else {
+                idUsuario = Number(idParametro);
+
+                if (
+                    !Number.isInteger(idUsuario) ||
+                    idUsuario <= 0
+                ) {
+                    throw new Error("Identificador de perfil inválido.");
+                }
+            }
+
+            const proprio = Boolean(
+                usuarioLogado &&
+                Number(usuarioLogado.iduser) === idUsuario
+            );
+
+            // Busca os dados públicos do perfil.
+            const perfil = await requisitarAPI(
+                `${API}/usuarios/${idUsuario}/perfil`
+            );
+
+            preencherPerfil(perfil, proprio);
+
+            if (proprio) {
+                // Exibe as abas somente no próprio perfil.
+                abas.hidden = false;
+
+                const [escritos, favoritos] = await Promise.all([
+                    requisitarAPI(
+                        `${API}/artigos/meus`,
+                        token
+                    ),
+                    requisitarAPI(
+                        `${API}/artigos/salvos`,
+                        token
+                    )
+                ]);
+
+                artigosEscritos = escritos;
+                artigosFavoritos = favoritos;
+
+                trocarAba("escritos");
+
+            } else {
+                // Visitantes veem somente os artigos publicados.
+                abas.hidden = true;
+
+                const artigos = await requisitarAPI(
+                    `${API}/usuarios/${idUsuario}/artigos`
+                );
+
+                exibirArtigos(artigos, "publicos");
+            }
+
+        } catch (erro) {
+            console.error("Erro ao carregar perfil:", erro);
+
+            nome.textContent = "Perfil indisponível";
+
+            descricao.textContent =
+                "Não foi possível carregar as informações deste usuário.";
+
+            totalArtigos.textContent = "—";
+
+            exibirMensagem(
+                erro.message || "Não foi possível carregar o perfil.",
+                "erro"
+            );
+        }
+    }
+
+
+    // Eventos das abas.
+    document.querySelectorAll(".perfil-aba").forEach(function (aba) {
+        aba.addEventListener("click", function () {
+            trocarAba(aba.dataset.aba);
+        });
+    });
+
+    // Remove artigos dos favoritos diretamente pelo perfil.
+    lista.addEventListener("click", async function (evento) {
+
+        const botao = evento.target.closest(".btn-remover-salvo");
+
+        if (!botao) return;
+
+        const idArtigo = botao.dataset.idArtigo;
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        // Evita cliques repetidos durante a requisição.
+        botao.disabled = true;
+        botao.textContent = "Removendo...";
+
+        try {
+            const resposta = await fetch(
+                `${API}/artigos/salvar/${encodeURIComponent(idArtigo)}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            const resultado = await resposta.json().catch(() => ({}));
+
+            if (resposta.status === 401 || resposta.status === 403) {
+                localStorage.removeItem("token");
+                window.location.href = "login.html";
+                return;
+            }
+
+            if (!resposta.ok) {
+                throw new Error(
+                    resultado.detail || "Não foi possível remover o favorito."
+                );
+            }
+
+            // Atualiza a lista armazenada no JavaScript.
+            artigosFavoritos = artigosFavoritos.filter(function (artigo) {
+                return String(artigo.idart) !== String(idArtigo);
+            });
+
+            // Remove o cartão da página.
+            const cartao = botao.closest(".card-artigo-salvo");
+
+            if (cartao) {
+                cartao.remove();
+            }
+
+            // Exibe a mensagem de lista vazia quando necessário.
+            if (artigosFavoritos.length === 0) {
+                exibirArtigos(artigosFavoritos, "favoritos");
+            } else {
+                mostrarNotificacao(
+                    "Artigo removido dos favoritos.",
+                    "sucesso"
+                );
+            }
+
+        } catch (erro) {
+            console.error("Erro ao remover favorito:", erro);
+
+            botao.disabled = false;
+            botao.textContent = "Remover dos favoritos";
+
+            mostrarNotificacao(
+                erro.message || "Não foi possível remover o favorito.",
+                "aviso"
+            );
+        }
+    });
+    carregarPerfil();
+
+})();

@@ -41,6 +41,7 @@ class ArtigoResponse(BaseModel):
     nome_autor: str
     status: str
     data_criacao: datetime
+    data_publicacao: datetime | None = None
 
     model_config = {
         "from_attributes": True

@@ -210,6 +210,7 @@ def listar_artigos_salvos(
             "nome_autor": nome_autor,
             "status": artigo.status,
             "data_criacao": artigo.data_criacao,
+            "data_publicacao": artigo.data_publicacao,
         }
         for artigo, nome_autor in resultados
     ]
@@ -239,7 +240,11 @@ def aprovar_artigo(
 
     artigo.status = "aprovado"
 
+    if artigo.data_publicacao is None:
+        artigo.data_publicacao = func.now()
+
     db.commit()
+    db.refresh(artigo)
 
     return {
         "mensagem": "Artigo aprovado com sucesso"
@@ -396,6 +401,7 @@ def listar_meus_artigos(
             "nome_autor": nome_autor,
             "status": artigo.status,
             "data_criacao": artigo.data_criacao,
+            "data_publicacao": artigo.data_publicacao,
         }
         for artigo, nome_autor in resultados
     ]

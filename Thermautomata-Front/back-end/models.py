@@ -19,6 +19,7 @@ class ArtigosDB(Base):
     iduser = Column(Integer, ForeignKey("usuario.iduser"), nullable=False)  # ID do usuário que criou o artigo
     status = Column(String(20), nullable=False, default="pendente")  # Status do artigo: pendente, aprovado, reprovado
     data_criacao = Column(DateTime, nullable=False, server_default=func.current_timestamp())  # Data de criação do artigo
+    data_publicacao = Column(DateTime, nullable=True) # Data de publicação do artigo, pode ser nula se o artigo ainda não foi publicado
 
 class FontesDB(Base):
     __tablename__ = 'fontes'

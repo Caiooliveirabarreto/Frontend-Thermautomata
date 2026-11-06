@@ -395,6 +395,16 @@ h4 {
     color: white;
 }
 
+/* Links para perfis de autores */
+.link-perfil-autor {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.link-perfil-autor:hover {
+    text-decoration: underline;
+}
 
 /* =======================================================
    PERFIL / MENU
@@ -2884,5 +2894,339 @@ input[type="password"]::-ms-clear {
     .card-salvo-acoes {
         flex-direction: row;
         flex-wrap: wrap;
+    }
+}
+
+/* =======================================================
+   PERFIL DE USUÁRIO
+======================================================= */
+
+.pagina-perfil {
+    width: calc(100% - 40px);
+    max-width: 1050px;
+    margin: 50px auto 80px;
+}
+
+/* Cabeçalho */
+
+.perfil-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+
+    padding: 28px;
+
+    background-color: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+}
+
+.perfil-identidade {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+}
+
+.perfil-foto {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+
+    object-fit: cover;
+
+    border: 3px solid #e5e5e5;
+    border-radius: 50%;
+}
+
+.perfil-informacoes {
+    min-width: 0;
+}
+
+.perfil-etiqueta {
+    display: block;
+    margin-bottom: 5px;
+
+    color: #888;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.perfil-informacoes h1 {
+    margin: 0 0 6px;
+
+    font-size: 27px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.perfil-informacoes p {
+    margin: 0;
+
+    color: #777;
+    font-size: 13px;
+}
+
+.perfil-estatistica {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.perfil-estatistica strong {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.perfil-estatistica span {
+    color: #777;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Abas */
+
+.perfil-conteudo {
+    margin-top: 35px;
+}
+
+.perfil-abas {
+    display: flex;
+    gap: 25px;
+
+    margin-bottom: 25px;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.perfil-abas[hidden] {
+    display: none !important;
+}
+
+.perfil-aba {
+    padding: 12px 5px;
+
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+
+    color: #777;
+    font-size: 14px;
+    font-weight: 500;
+
+    transition: 0.2s;
+}
+
+.perfil-aba:hover {
+    color: #222;
+}
+
+.perfil-aba.ativa {
+    color: #222;
+    border-bottom-color: #222;
+    font-weight: 600;
+}
+
+/* Lista de artigos */
+
+.lista-perfil-artigos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Reaproveita os cartões de meus-artigos.html */
+
+.pagina-perfil .meu-artigo {
+    align-items: flex-start;
+}
+
+.pagina-perfil .meu-artigo-conteudo {
+    flex: 1;
+    min-width: 0;
+}
+
+.pagina-perfil .meu-artigo-conteudo h2 {
+    overflow-wrap: anywhere;
+}
+
+.pagina-perfil .meu-artigo-conteudo h2 a {
+    color: #222;
+    text-decoration: none;
+}
+
+.pagina-perfil .meu-artigo-conteudo h2 a:hover {
+    text-decoration: underline;
+}
+
+.perfil-resumo {
+    margin: 9px 0 0;
+
+    color: #666;
+    font-size: 13px;
+    line-height: 1.7;
+
+    overflow-wrap: anywhere;
+}
+
+.pagina-perfil .meu-artigo-acoes {
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+/* Reaproveita os cartões de salvos.html */
+
+.pagina-perfil .card-artigo-salvo {
+    align-items: flex-start;
+}
+
+.pagina-perfil .card-salvo-conteudo h2 a {
+    color: #222;
+    text-decoration: none;
+}
+
+.pagina-perfil .card-salvo-conteudo h2 a:hover {
+    text-decoration: underline;
+}
+
+/* Links de autores */
+
+.link-perfil-autor {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.link-perfil-autor:hover {
+    text-decoration: underline;
+}
+
+/* Mensagens de carregamento, erro e lista vazia */
+
+.perfil-mensagem {
+    margin: 20px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.perfil-mensagem[hidden] {
+    display: none !important;
+}
+
+.perfil-mensagem.vazio {
+    padding: 35px 24px;
+
+    background: #fafafa;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+
+    color: #777;
+    text-align: center;
+}
+
+.perfil-mensagem.erro {
+    color: #b42318;
+}
+
+/* =======================================================
+   RESPONSIVIDADE DO PERFIL
+======================================================= */
+
+@media (max-width: 700px) {
+
+    .pagina-perfil {
+        width: calc(100% - 30px);
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+
+    .perfil-cabecalho {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 22px;
+    }
+
+    .perfil-foto {
+        width: 80px;
+        height: 80px;
+    }
+
+    .perfil-informacoes h1 {
+        font-size: 22px;
+    }
+
+    .perfil-estatistica {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .perfil-estatistica strong {
+        font-size: 23px;
+    }
+
+    .perfil-abas {
+        gap: 15px;
+        overflow-x: auto;
+    }
+
+    .perfil-aba {
+        flex-shrink: 0;
+        font-size: 12px;
+    }
+
+    .pagina-perfil .meu-artigo {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .pagina-perfil .meu-artigo-acoes {
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .pagina-perfil .card-artigo-salvo {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .pagina-perfil .card-salvo-acoes {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .perfil-identidade {
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .perfil-foto {
+        width: 65px;
+        height: 65px;
+    }
+
+    .perfil-informacoes h1 {
+        font-size: 19px;
+    }
+
+    .perfil-informacoes p {
+        font-size: 11px;
+    }
+
+    .perfil-abas {
+        gap: 10px;
+    }
+
+    .perfil-aba {
+        padding: 10px 3px;
+        font-size: 11px;
     }
 }

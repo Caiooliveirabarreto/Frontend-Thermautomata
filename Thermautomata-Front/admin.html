@@ -8,13 +8,22 @@
         rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
         crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <title>Administração</title>
+    <script>
+        try {
+            if (localStorage.getItem("token")) {
+                document.documentElement.classList.add("usuario-autenticando");
+            }
+        } catch (erro) {
+            console.warn("Não foi possível verificar o token.");
+        }
+    </script>
 </head>
 
 <body>
@@ -24,7 +33,7 @@
             <div class="row align-items-center">
 
                 <div class="col-4">
-                    <img src="assets/logo.png" alt="Logo" class="img-fluid">
+                    <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
                 </div>
 
                 <div class="col-5 align-items-center d-flex justify-content-center desktop-nav-links">
@@ -72,8 +81,6 @@
             <a href="index.html" class="nav-link-custom">SOBRE</a>
             <a href="artigos.html" class="nav-link-custom">ARTIGOS</a>
             <a href="download.html" class="nav-link-custom">DOWNLOAD</a>
-            <a href="salvos.html" class="nav-link-custom">ARTIGOS SALVOS</a>
-
             <a
                 href="admin.html"
                 class="nav-link-custom"
@@ -82,11 +89,6 @@
             >
                 PAINEL
             </a>
-
-            <a href="meus-artigos.html" class="nav-link-custom">
-                MEUS ARTIGOS
-            </a>
-
             <a href="login.html" class="login-btn-mobile" id="mobileAuthAction">
                 LOGIN
             </a>
@@ -94,7 +96,7 @@
     </aside>
 
     <!-- Área administrativa -->
-    <main class="container mt-5" id="areaAdmin">
+    <main class="container mt-5 pagina-admin" id="areaAdmin">
 
         <div class="admin-cabecalho">
 
@@ -140,9 +142,9 @@
 
     </main>
 
-
+    <script src="assets/config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script src="assets/script.js"></script>
     <script type="module"
         src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js">
     </script>
@@ -162,7 +164,7 @@
             try {
 
                 const resposta = await fetch(
-                    "http://127.0.0.1:8000/auth/me",
+                    `${window.API_BASE}/auth/me`,
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`
@@ -211,7 +213,7 @@
             try {
 
                 const resposta = await fetch(
-                    "http://127.0.0.1:8000/artigos/",
+                    `${window.API_BASE}/artigos/admin/todos`,
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`
@@ -452,7 +454,7 @@
 
         function visualizarArtigo(idart) {
 
-            window.location.href = `artigo.html?id=${idart}`;
+            window.location.href = `artigo.html?id=${encodeURIComponent(idart)}&preview=1`;
 
         }
 
@@ -475,7 +477,7 @@
             try {
 
                 const resposta = await fetch(
-                    `http://127.0.0.1:8000/artigos/deletar/${idart}`,
+                    `${window.API_BASE}/artigos/deletar/${idart}`,
                     {
                         method: "DELETE",
 
@@ -530,7 +532,7 @@
 
             try {
                 const resposta = await fetch(
-                    `http://127.0.0.1:8000/artigos/aprovar/${idart}`,
+                    `${window.API_BASE}/artigos/aprovar/${idart}`,
                     {
                         method: "PUT",
 
@@ -583,7 +585,7 @@
 
             try {
                 const resposta = await fetch(
-                    `http://127.0.0.1:8000/artigos/rejeitar/${idart}`,
+                    `${window.API_BASE}/artigos/rejeitar/${idart}`,
                     {
                         method: "PUT",
 

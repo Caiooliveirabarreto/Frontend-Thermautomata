@@ -7,7 +7,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +17,15 @@
         rel="stylesheet">
 
     <title>Artigo</title>
+    <script>
+        try {
+            if (localStorage.getItem("token")) {
+                document.documentElement.classList.add("usuario-autenticando");
+            }
+        } catch (erro) {
+            console.warn("Não foi possível verificar o token.");
+        }
+    </script>
 </head>
 
 <body>
@@ -25,7 +34,7 @@
         <nav>
             <div class="row align-items-center">
                 <div class="col-4">
-                    <img src="assets/logo.png" alt="Logo" class="img-fluid">
+                    <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
                 </div>
 
                 <div class="col-5 align-items-center d-flex justify-content-center desktop-nav-links">
@@ -68,8 +77,6 @@
             <a href="index.html" class="nav-link-custom">SOBRE</a>
             <a href="artigos.html" class="nav-link-custom">ARTIGOS</a>
             <a href="download.html" class="nav-link-custom">DOWNLOAD</a>
-            <a href="salvos.html" class="nav-link-custom">ARTIGOS SALVOS</a>
-
             <a
                 href="admin.html"
                 class="nav-link-custom"
@@ -78,200 +85,435 @@
             >
                 PAINEL
             </a>
-
-            <a href="meus-artigos.html" class="nav-link-custom">
-                MEUS ARTIGOS
-            </a>
-
             <a href="login.html" class="login-btn-mobile" id="mobileAuthAction">
                 LOGIN
             </a>
         </nav>
     </aside>
 
-    <main class="container">
+    <main class="container pagina-artigo">
         <button class="btn-voltar-artigos" onclick="history.back()">
             ← Voltar
         </button>
         <div id="artigoCompleto"></div>
     </main>
 
-    <script src="script.js"></script>
+    <script src="assets/config.js"></script>
+    <script src="assets/script.js"></script>
     <script>
-        const parametros = new URLSearchParams(window.location.search);
-        const idArtigo = parametros.get("id");
+        (function () {
+            const parametros = new URLSearchParams(window.location.search);
 
-        async function carregarArtigo() {
-            try {
-                const resposta = await fetch(
-                    `http://127.0.0.1:8000/artigos/${idArtigo}/detalhes`
-                );
+            const idArtigo = parametros.get("id");
+            const modoPrivado = parametros.get("preview") === "1";
 
-                if (!resposta.ok) {
-                    throw new Error("Erro ao buscar artigo");
+            const API = window.API_BASE;
+            const container = document.getElementById("artigoCompleto");
+
+
+            // Cria elementos sem interpretar conteúdo recebido da API como HTML.
+            function criarElemento(tag, classe, texto) {
+                const elemento = document.createElement(tag);
+
+                if (classe) {
+                    elemento.className = classe;
                 }
 
-                const artigo = await resposta.json();
+                if (texto !== undefined && texto !== null) {
+                    elemento.textContent = texto;
+                }
 
-                document.getElementById("artigoCompleto").innerHTML = `
-                    <div class="cabecalho-artigo">
-                        <div>
-                            <h1>${artigo.titulo}</h1>
-                            <h3>
-                                <a
-                                    class="link-perfil-autor"
-                                    href="perfil.html?id=${encodeURIComponent(artigo.iduser)}"
-                                >
-                                    ${artigo.nome_autor}
-                                </a>
-                            </h3>
-                            <p>${new Date(artigo.data_criacao).toLocaleDateString("pt-BR")}</p>
-                        </div>
+                return elemento;
+            }
 
-                        <button id="btnSalvar" class="btn-salvar">
-                            <span class="estrela">☆</span>
-                            <span class="texto-salvar">Salvar</span>
-                        </button>
-                    </div>
 
-                    <div class="conteudo-artigo">
-                        <p>${artigo.artigo}</p>
-                    </div>
+            // Formata a data.
+            function formatarData(valor) {
+                if (!valor) return "Data não informada";
 
-                    <div class="tags-artigo">
-                        <h3>Tags</h3>
+                const data = new Date(valor);
 
-                        <div class="lista-tags-artigo">
-                            ${
-                                artigo.tags.map(function(tag) {
-                                    return `<span class="tag-artigo">${tag.nome}</span>`;
-                                }).join("")
+                if (Number.isNaN(data.getTime())) {
+                    return "Data não informada";
+                }
+
+                return data.toLocaleDateString("pt-BR");
+            }
+
+
+            // Exibe uma mensagem de erro.
+            function exibirErro(texto) {
+                container.innerHTML = "";
+
+                const mensagem = criarElemento(
+                    "div",
+                    "mensagem-erro-artigo",
+                    texto
+                );
+
+                container.appendChild(mensagem);
+            }
+
+
+            // Atualiza a aparência do botão de favorito.
+            function atualizarBotaoSalvar(botao, salvo) {
+                botao.innerHTML = "";
+
+                const estrela = criarElemento(
+                    "span",
+                    "estrela",
+                    salvo ? "★" : "☆"
+                );
+
+                const texto = criarElemento(
+                    "span",
+                    "texto-salvar",
+                    salvo ? "Salvo" : "Salvar"
+                );
+
+                botao.appendChild(estrela);
+                botao.appendChild(texto);
+            }
+
+
+            // Verifica se o artigo já está favoritado.
+            async function verificarSeEstaSalvo(botao) {
+                const token = localStorage.getItem("token");
+
+                if (!token) return;
+
+                try {
+                    const resposta = await fetch(
+                        `${API}/artigos/salvos`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
                             }
-                        </div>
-                    </div>
-
-                    <div class="fontes-artigo">
-                        <h3>Referências</h3>
-
-                        <div class="lista-fontes-artigo">
-                            ${
-                                artigo.fontes.map(function(fonte) {
-                                    return `
-                                        <div class="fonte-artigo">
-                                            <strong>${fonte.nome}</strong>
-
-                                            <a href="${fonte.link}" target="_blank">
-                                                ${fonte.link}
-                                            </a>
-                                        </div>
-                                    `;
-                                }).join("")
-                            }
-                        </div>
-                    </div>
-                `;
-
-                document.getElementById("btnSalvar").addEventListener("click", async function () {
-                    try {
-                        const token = localStorage.getItem("token");
-
-                        if (!token) {
-                            mostrarNotificacao(
-                                "Você precisa estar logado para salvar um artigo.",
-                                "aviso"
-                            );
-                            return;
                         }
+                    );
 
-                        const botao = document.getElementById("btnSalvar");
+                    if (!resposta.ok) return;
 
-                        const estaSalvo = botao.querySelector(".estrela").textContent === "★";
+                    const artigosSalvos = await resposta.json();
 
-                        const resposta = await fetch(
-                            `http://127.0.0.1:8000/artigos/salvar/${idArtigo}`,
-                            {
-                                method: estaSalvo ? "DELETE" : "POST",
-                                headers: {
-                                    "Authorization": `Bearer ${token}`
-                                }
-                            }
-                        );
+                    const estaSalvo = artigosSalvos.some(function (artigo) {
+                        return Number(artigo.idart) === Number(idArtigo);
+                    });
 
-                        const resultado = await resposta.json();
+                    atualizarBotaoSalvar(botao, estaSalvo);
 
-                        if (!resposta.ok) {
-                            mostrarNotificacao(resultado.detail, "erro");
-                            return;
-                        }
+                } catch (erro) {
+                    console.error("Erro ao verificar favorito:", erro);
+                }
+            }
 
-                        if (estaSalvo) {
-                            botao.innerHTML = `
-                                <span class="estrela">☆</span>
-                                <span class="texto-salvar">Salvar</span>
-                            `;
 
-                            mostrarNotificacao("Artigo removido dos salvos!");
-                        } else {
-                            botao.innerHTML = `
-                                <span class="estrela">★</span>
-                                <span class="texto-salvar"><strong>Salvo</strong></span>
-                            `;
-
-                            mostrarNotificacao("Artigo salvo com sucesso!");
-                        }
-
-                    } catch (erro) {
-                        console.error("Erro ao alterar artigo salvo:", erro);
-                    }
-                });
-                async function verificarSeEstaSalvo() {
+            // Configura o botão de favorito.
+            function configurarBotaoSalvar(botao) {
+                botao.addEventListener("click", async function () {
                     const token = localStorage.getItem("token");
 
                     if (!token) {
+                        mostrarNotificacao(
+                            "Você precisa estar logado para salvar um artigo.",
+                            "aviso"
+                        );
                         return;
                     }
 
+                    const estaSalvo =
+                        botao.querySelector(".estrela").textContent === "★";
+
+                    botao.disabled = true;
+
                     try {
                         const resposta = await fetch(
-                            "http://127.0.0.1:8000/artigos/salvos",
+                            `${API}/artigos/salvar/${encodeURIComponent(idArtigo)}`,
                             {
+                                method: estaSalvo ? "DELETE" : "POST",
                                 headers: {
-                                    "Authorization": `Bearer ${token}`
+                                    Authorization: `Bearer ${token}`
                                 }
                             }
                         );
 
-                        if (!resposta.ok) {
+                        const resultado = await resposta.json().catch(() => ({}));
+
+                        if (resposta.status === 401) {
+                            localStorage.removeItem("token");
+                            window.location.href = "login.html";
                             return;
                         }
 
-                        const artigosSalvos = await resposta.json();
-
-                        const estaSalvo = artigosSalvos.some(function (artigo) {
-                            return artigo.idart === Number(idArtigo);
-                        });
-
-                        if (estaSalvo) {
-                            document.getElementById("btnSalvar").innerHTML = `
-                                <span class="estrela">★</span>
-                                <span class="texto-salvar"><strong>Salvo</strong></span>
-                            `;
+                        if (!resposta.ok) {
+                            throw new Error(
+                                resultado.detail || "Não foi possível alterar o favorito."
+                            );
                         }
 
+                        atualizarBotaoSalvar(botao, !estaSalvo);
+
+                        mostrarNotificacao(
+                            estaSalvo
+                                ? "Artigo removido dos favoritos!"
+                                : "Artigo salvo com sucesso!"
+                        );
+
                     } catch (erro) {
-                        console.error("Erro ao verificar artigo salvo:", erro);
+                        console.error("Erro ao alterar favorito:", erro);
+
+                        mostrarNotificacao(erro.message, "erro");
+
+                    } finally {
+                        botao.disabled = false;
                     }
+                });
+            }
+
+
+            // Constrói a página do artigo.
+            function exibirArtigo(artigo) {
+                container.innerHTML = "";
+
+                const cabecalho = criarElemento(
+                    "div",
+                    "cabecalho-artigo"
+                );
+
+                const informacoes = document.createElement("div");
+
+                const titulo = criarElemento(
+                    "h1",
+                    "",
+                    artigo.titulo
+                );
+
+                const autor = document.createElement("h3");
+
+                const linkAutor = criarElemento(
+                    "a",
+                    "link-perfil-autor",
+                    artigo.nome_autor
+                );
+
+                linkAutor.href =
+                    `perfil.html?id=${encodeURIComponent(artigo.iduser)}`;
+
+                autor.appendChild(linkAutor);
+
+                const publicado = artigo.status === "aprovado";
+
+                const data = publicado
+                    ? (artigo.data_publicacao || artigo.data_criacao)
+                    : artigo.data_criacao;
+
+                const dataElemento = criarElemento(
+                    "p",
+                    "",
+                    `${publicado ? "Publicado em: " : "Enviado em: "}${formatarData(data)}`
+                );
+
+                informacoes.appendChild(titulo);
+                informacoes.appendChild(autor);
+                informacoes.appendChild(dataElemento);
+
+                cabecalho.appendChild(informacoes);
+
+                // O botão de favorito só existe para artigos publicados.
+                if (publicado && !modoPrivado) {
+                    const botaoSalvar = criarElemento(
+                        "button",
+                        "btn-salvar"
+                    );
+
+                    botaoSalvar.id = "btnSalvar";
+                    botaoSalvar.type = "button";
+
+                    atualizarBotaoSalvar(botaoSalvar, false);
+                    cabecalho.appendChild(botaoSalvar);
+
+                    configurarBotaoSalvar(botaoSalvar);
+                    verificarSeEstaSalvo(botaoSalvar);
                 }
 
-                verificarSeEstaSalvo();
+                container.appendChild(cabecalho);
 
-            } catch (erro) {
-                console.error("Erro:", erro);
+                // Aviso de visualização privada.
+                if (modoPrivado) {
+                    const statusTexto = artigo.status === "pendente"
+                        ? "Pendente de aprovação"
+                        : artigo.status === "rejeitado"
+                            ? "Artigo rejeitado"
+                            : "Visualização privada";
+
+                    const aviso = criarElemento(
+                        "div",
+                        `aviso-preview-artigo status-${artigo.status}`,
+                        `${statusTexto}. Este conteúdo está disponível somente para o autor e os administradores.`
+                    );
+
+                    container.appendChild(aviso);
+                }
+
+                // Conteúdo.
+                const secaoConteudo = criarElemento(
+                    "div",
+                    "conteudo-artigo"
+                );
+
+                const textoConteudo = criarElemento(
+                    "p",
+                    "",
+                    artigo.artigo
+                );
+
+                textoConteudo.style.whiteSpace = "pre-wrap";
+
+                secaoConteudo.appendChild(textoConteudo);
+                container.appendChild(secaoConteudo);
+
+                // Tags.
+                const secaoTags = criarElemento(
+                    "div",
+                    "tags-artigo"
+                );
+
+                secaoTags.appendChild(
+                    criarElemento("h3", "", "Tags")
+                );
+
+                const listaTags = criarElemento(
+                    "div",
+                    "lista-tags-artigo"
+                );
+
+                (artigo.tags || []).forEach(function (tag) {
+                    listaTags.appendChild(
+                        criarElemento("span", "tag-artigo", tag.nome)
+                    );
+                });
+
+                secaoTags.appendChild(listaTags);
+                container.appendChild(secaoTags);
+
+                // Fontes.
+                const secaoFontes = criarElemento(
+                    "div",
+                    "fontes-artigo"
+                );
+
+                secaoFontes.appendChild(
+                    criarElemento("h3", "", "Referências")
+                );
+
+                const listaFontes = criarElemento(
+                    "div",
+                    "lista-fontes-artigo"
+                );
+
+                (artigo.fontes || []).forEach(function (fonte) {
+                    const elementoFonte = criarElemento(
+                        "div",
+                        "fonte-artigo"
+                    );
+
+                    elementoFonte.appendChild(
+                        criarElemento("strong", "", fonte.nome)
+                    );
+
+                    let urlValida = null;
+
+                    try {
+                        const url = new URL(fonte.link);
+
+                        if (url.protocol === "http:" || url.protocol === "https:") {
+                            urlValida = url.href;
+                        }
+                    } catch (erro) {
+                        urlValida = null;
+                    }
+
+                    if (urlValida) {
+                        const link = criarElemento(
+                            "a",
+                            "",
+                            fonte.link
+                        );
+
+                        link.href = urlValida;
+                        link.target = "_blank";
+                        link.rel = "noopener noreferrer";
+
+                        elementoFonte.appendChild(link);
+                    } else {
+                        elementoFonte.appendChild(
+                            criarElemento("span", "", fonte.link)
+                        );
+                    }
+
+                    listaFontes.appendChild(elementoFonte);
+                });
+
+                secaoFontes.appendChild(listaFontes);
+                container.appendChild(secaoFontes);
             }
-        }
 
-        carregarArtigo();
-    </script>
+
+            // Carrega o artigo público ou privado.
+            async function carregarArtigo() {
+                try {
+                    if (!idArtigo || !Number.isInteger(Number(idArtigo))) {
+                        throw new Error("Identificador de artigo inválido.");
+                    }
+
+                    const token = localStorage.getItem("token");
+
+                    if (modoPrivado && !token) {
+                        window.location.href = "login.html";
+                        return;
+                    }
+
+                    const url = modoPrivado
+                        ? `${API}/artigos/privado/${encodeURIComponent(idArtigo)}/detalhes`
+                        : `${API}/artigos/${encodeURIComponent(idArtigo)}/detalhes`;
+
+                    const opcoes = {};
+
+                    if (modoPrivado) {
+                        opcoes.headers = {
+                            Authorization: `Bearer ${token}`
+                        };
+                    }
+
+                    const resposta = await fetch(url, opcoes);
+
+                    const resultado = await resposta.json().catch(() => ({}));
+
+                    if (!resposta.ok) {
+                        if (resposta.status === 401) {
+                            localStorage.removeItem("token");
+                            window.location.href = "login.html";
+                            return;
+                        }
+
+                        throw new Error(
+                            resultado.detail || "Não foi possível acessar este artigo."
+                        );
+                    }
+
+                    exibirArtigo(resultado);
+
+                } catch (erro) {
+                    console.error("Erro ao carregar artigo:", erro);
+                    exibirErro(erro.message);
+                }
+            }
+
+
+            carregarArtigo();
+
+        })();
+        </script>
 
 </body>
 

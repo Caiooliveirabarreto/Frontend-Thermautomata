@@ -134,6 +134,13 @@ def salvar_artigo(
             detail="Artigo não encontrado"
         )
 
+    # Somente artigos publicados podem ser favoritados.
+    if artigo.status != "aprovado":
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não encontrado"
+        )
+
     salvo_existente = db.query(SalvosDB).filter(
         SalvosDB.iduser == usuario.iduser,
         SalvosDB.idart == idart
@@ -198,7 +205,13 @@ def listar_artigos_salvos(
         SalvosDB,
         SalvosDB.idart == ArtigosDB.idart
     ).filter(
-        SalvosDB.iduser == usuario.iduser
+        SalvosDB.iduser == usuario.iduser,
+        ArtigosDB.status == "aprovado"
+    ).order_by(
+        func.coalesce(
+            ArtigosDB.data_publicacao,
+            ArtigosDB.data_criacao
+        ).desc()
     ).all()
 
     return [
@@ -309,6 +322,8 @@ def listar_artigos(
     ).join(
         UsuarioDB,
         UsuarioDB.iduser == ArtigosDB.iduser
+    ).filter(
+        ArtigosDB.status == "aprovado"
     )
 
     if autor:
@@ -337,6 +352,7 @@ def listar_artigos(
             "nome_autor": nome_autor,
             "status": artigo.status,
             "data_criacao": artigo.data_criacao,
+            "data_publicacao": artigo.data_publicacao,
         }
         for artigo, nome_autor in resultados
     ]
@@ -376,6 +392,42 @@ def listar_artigos_pendentes(
         for artigo, nome_autor in resultados
     ]
 
+# Lista todos os artigos, exclusivamente para administradores.
+@router.get("/admin/todos", response_model=list[ArtigoResponse])
+def listar_todos_artigos_admin(
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    if usuario.tipo != 1:
+        raise HTTPException(
+            status_code=403,
+            detail="Acesso permitido apenas para administradores"
+        )
+
+    resultados = db.query(
+        ArtigosDB,
+        UsuarioDB.nome.label("nome_autor")
+    ).join(
+        UsuarioDB,
+        UsuarioDB.iduser == ArtigosDB.iduser
+    ).order_by(
+        ArtigosDB.data_criacao.desc()
+    ).all()
+
+    return [
+        {
+            "idart": artigo.idart,
+            "titulo": artigo.titulo,
+            "artigo": artigo.artigo,
+            "iduser": artigo.iduser,
+            "nome_autor": nome_autor,
+            "status": artigo.status,
+            "data_criacao": artigo.data_criacao,
+            "data_publicacao": artigo.data_publicacao
+        }
+        for artigo, nome_autor in resultados
+    ]
+
 # Rota para listar artigos de um usuário específico
 @router.get("/meus")
 def listar_meus_artigos(
@@ -406,6 +458,86 @@ def listar_meus_artigos(
         for artigo, nome_autor in resultados
     ]
 
+# Visualização privada de artigos não publicados.
+# Permite acesso somente ao autor ou a um administrador.
+@router.get("/privado/{idart}/detalhes")
+def buscar_detalhes_artigo_privado(
+    idart: int,
+    db: Session = Depends(get_db),
+    usuario=Depends(get_usuario_atual)
+):
+    resultado = db.query(
+        ArtigosDB,
+        UsuarioDB.nome.label("nome_autor")
+    ).join(
+        UsuarioDB,
+        UsuarioDB.iduser == ArtigosDB.iduser
+    ).filter(
+        ArtigosDB.idart == idart
+    ).first()
+
+    if not resultado:
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não encontrado"
+        )
+
+    artigo, nome_autor = resultado
+
+    # Somente o autor ou um administrador pode visualizar.
+    if artigo.iduser != usuario.iduser and usuario.tipo != 1:
+        raise HTTPException(
+            status_code=404,
+            detail="Artigo não encontrado"
+        )
+
+    fontes = db.query(
+        ArtigosFontesDB.nome,
+        FontesDB.link
+    ).join(
+        FontesDB,
+        FontesDB.idfont == ArtigosFontesDB.idfont
+    ).filter(
+        ArtigosFontesDB.idart == idart
+    ).all()
+
+    tags = db.query(
+        TagsDB.idtag,
+        TagsDB.nome
+    ).join(
+        ArtigosTagsDB,
+        ArtigosTagsDB.idtag == TagsDB.idtag
+    ).filter(
+        ArtigosTagsDB.idart == idart
+    ).all()
+
+    return {
+        "idart": artigo.idart,
+        "titulo": artigo.titulo,
+        "artigo": artigo.artigo,
+        "iduser": artigo.iduser,
+        "nome_autor": nome_autor,
+        "status": artigo.status,
+        "data_criacao": artigo.data_criacao,
+        "data_publicacao": artigo.data_publicacao,
+
+        "fontes": [
+            {
+                "nome": fonte.nome,
+                "link": fonte.link
+            }
+            for fonte in fontes
+        ],
+
+        "tags": [
+            {
+                "idtag": tag.idtag,
+                "nome": tag.nome
+            }
+            for tag in tags
+        ]
+    }
+
 # Rota para buscar detalhes de um artigo específico
 @router.get("/{idart}/detalhes")
 def buscar_detalhes_artigo(
@@ -419,7 +551,8 @@ def buscar_detalhes_artigo(
         UsuarioDB,
         UsuarioDB.iduser == ArtigosDB.iduser
     ).filter(
-        ArtigosDB.idart == idart
+        ArtigosDB.idart == idart,
+        ArtigosDB.status == "aprovado"
     ).first()
 
     if not resultado:
@@ -458,6 +591,7 @@ def buscar_detalhes_artigo(
         "nome_autor": nome_autor,
         "status": artigo.status,
         "data_criacao": artigo.data_criacao,
+        "data_publicacao": artigo.data_publicacao or artigo.data_criacao,
 
         "fontes": [
             {
@@ -489,7 +623,8 @@ def buscar_artigo(
         UsuarioDB,
         UsuarioDB.iduser == ArtigosDB.iduser
     ).filter(
-        ArtigosDB.idart == idart
+        ArtigosDB.idart == idart,
+        ArtigosDB.status == "aprovado"
     ).first()
 
     if not resultado:
@@ -508,4 +643,5 @@ def buscar_artigo(
         "nome_autor": nome_autor,
         "status": artigo.status,
         "data_criacao": artigo.data_criacao,
+        "data_publicacao": artigo.data_publicacao,
     }

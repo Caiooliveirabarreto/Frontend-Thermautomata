@@ -15,7 +15,11 @@ router = APIRouter(
     prefix="/auth",
     tags=["Autenticação"]
 )
-PASTA_FOTOS = Path("uploads/perfis")
+PASTA_FOTOS = (
+    Path(__file__).resolve().parents[1]
+    / "uploads"
+    / "perfis"
+)
 PASTA_FOTOS.mkdir(parents=True, exist_ok=True)
 
 # Endpoint para cadastro de usuário

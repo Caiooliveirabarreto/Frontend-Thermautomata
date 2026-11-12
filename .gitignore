@@ -3,7 +3,7 @@ venv/
 env/
 
 # Cache do Python
-_pycache_/
+back-end/routers/__pycache__/
 *.pyc
 
 # Arquivos de ambiente (caso usem futuramente)

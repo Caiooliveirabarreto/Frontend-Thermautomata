@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -14,6 +14,15 @@
         rel="stylesheet">
     
     <title>Thermautomata</title>
+    <script>
+        try {
+            if (localStorage.getItem("token")) {
+                document.documentElement.classList.add("usuario-autenticando");
+            }
+        } catch (erro) {
+            console.warn("Não foi possível verificar o token.");
+        }
+    </script>
 </head>
 
 <body>
@@ -21,7 +30,7 @@
         <nav>
             <div class="row align-items-center">
                 <div class="col-4">
-                    <img src="assets/logo.png" alt="Logo" class="img-fluid">
+                    <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
                 </div>
                 <div class="col-5 align-items-center d-flex justify-content-center desktop-nav-links">
                     <a href="index.html" class="nav-link-custom">SOBRE</a>
@@ -58,8 +67,6 @@
             <a href="index.html" class="nav-link-custom">SOBRE</a>
             <a href="artigos.html" class="nav-link-custom">ARTIGOS</a>
             <a href="download.html" class="nav-link-custom">DOWNLOAD</a>
-            <a href="salvos.html" class="nav-link-custom">ARTIGOS SALVOS</a>
-
             <a
                 href="admin.html"
                 class="nav-link-custom"
@@ -68,11 +75,6 @@
             >
                 PAINEL
             </a>
-
-            <a href="meus-artigos.html" class="nav-link-custom">
-                MEUS ARTIGOS
-            </a>
-
             <a href="login.html" class="login-btn-mobile" id="mobileAuthAction">
                 LOGIN
             </a>
@@ -86,7 +88,7 @@
             <div class="estudio-introducao">
 
                 <img
-                    src="assets/Design sem nome.png"
+                    src="assets/images/Design sem nome.png"
                     alt="Heart Roulette"
                     class="logo-estudio">
 
@@ -136,7 +138,7 @@
                     <div class="membro">
 
                         <img
-                            src="assets/Gui.jpg"
+                            src="assets/images/Gui.jpg"
                             alt="Guilherme Gimenes">
 
                         <h3>Guilherme Gimenes</h3>
@@ -154,7 +156,7 @@
                     <div class="membro">
 
                         <img
-                            src="assets/Joo.jpg"
+                            src="assets/images/Joo.jpg"
                             alt="João Arthur Rípoli">
 
                         <h3>João Arthur Rípoli</h3>
@@ -172,7 +174,7 @@
                     <div class="membro">
 
                         <img
-                            src="assets/Dudu.jpg"
+                            src="assets/images/Dudu.jpg"
                             alt="Eduardo Luiz Franceliano">
 
                         <h3>Eduardo Luiz Franceliano</h3>
@@ -190,7 +192,7 @@
                     <div class="membro">
 
                         <img
-                            src="assets/IMG_20260613_133433_040.png"
+                            src="assets/images/IMG_20260613_133433_040.png"
                             alt="Caio Oliveira Barreto">
 
                         <h3>Caio Oliveira Barreto</h3>
@@ -208,7 +210,7 @@
                     <div class="membro">
 
                         <img
-                            src="assets/euarthur (1).jpg"
+                            src="assets/images/euarthur (1).jpg"
                             alt="Arthur Ribeiro Luz">
 
                         <h3>Arthur Ribeiro Luz</h3>
@@ -247,7 +249,7 @@
 
                 <div class="projeto-imagem">
                     <img
-                        src="assets/THERMAU,MAIN_MENU.PNG"
+                        src="assets/images/THERMAU,MAIN_MENU.PNG"
                         alt="Thermautomata"
                         class="img-fluid">
                 </div>
@@ -289,7 +291,7 @@
                 <div class="projeto-imagem">
 
                     <img
-                        src="assets/cidade.png"
+                        src="assets/images/cidade.png"
                         alt="Mundo de Thermautomata"
                         class="img-fluid">
 
@@ -301,7 +303,7 @@
                 <div class="projeto-imagem">
 
                     <img
-                        src="assets/cidade2.png"
+                        src="assets/images/cidade2.png"
                         alt="Elementos de Thermautomata"
                         class="img-fluid">
 
@@ -351,7 +353,7 @@
                 <div class="ods-item">
 
                     <img
-                        src="assets/Objetivo_Desenvolvimento_Sustentável_9_PT.jpg"
+                        src="assets/images/Objetivo_Desenvolvimento_Sustentável_9_PT.jpg"
                         alt="ODS 9 - Indústria, inovação e infraestrutura">
 
                     <h3>Indústria, inovação e infraestrutura</h3>
@@ -366,7 +368,7 @@
                 <div class="ods-item">
 
                     <img
-                        src="assets/11.png"
+                        src="assets/images/11.png"
                         alt="ODS 11 - Cidades e comunidades sustentáveis">
 
                     <h3>Cidades e comunidades sustentáveis</h3>
@@ -381,7 +383,7 @@
                 <div class="ods-item">
 
                     <img
-                        src="assets/ods12.jpg"
+                        src="assets/images/ods12.jpg"
                         alt="ODS 12 - Consumo e produção responsáveis">
 
                     <h3>Consumo e produção responsáveis</h3>
@@ -463,10 +465,11 @@
 
 </body>
 
+    <script src="assets/config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    <script src="script.js"></script>
+    <script src="assets/script.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 

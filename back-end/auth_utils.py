@@ -1,6 +1,5 @@
 import jwt
 import os
-
 from fastapi import HTTPException, Depends
 from models import UsuarioDB
 from sqlalchemy.orm import Session
@@ -8,10 +7,17 @@ from fastapi.security import HTTPBearer
 from database import get_db
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
+from pathlib import Path
 
 load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
 
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("SECRET_KEY")
+
+if not SECRET_KEY:
+    raise ValueError("A variável de ambiente SECRET_KEY não está definida.")
+
 ALGORITHM = "HS256"
 security = HTTPBearer()
 

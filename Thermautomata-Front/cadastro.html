@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body class="body-login">
@@ -31,7 +31,7 @@
             <div class="profile-upload">
 
                 <div class="profile-avatar">
-                    <img src="back-end/uploads/perfis/template-perfil.jpg" alt="Perfil">
+                    <img src="assets/images/template-perfil.jpg" alt="Perfil">
                 </div>
 
                 <input type="file" class="upload-btn" id="fotoPerfil">
@@ -92,8 +92,9 @@
 
     </div>
 
+    <script src="assets/config.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="script.js"></script>
+    <script src="assets/script.js"></script>
     <script>
 
         lucide.createIcons();
@@ -118,7 +119,7 @@
 
             try {
 
-                const resposta = await fetch("http://127.0.0.1:8000/auth/cadastro", {
+                const resposta = await fetch(`${window.API_BASE}/auth/cadastro`, {
                     method: "POST",
                     body: dados
                 });

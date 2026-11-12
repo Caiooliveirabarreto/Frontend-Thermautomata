@@ -124,7 +124,7 @@ function atualizarMenuMobile(usuario) {
     // Os atalhos antigos serão acessados pelo perfil.
     if (menu) {
         menu.querySelectorAll(
-            'a[href="meus-artigos.html"], a[href="salvos.html"]'
+            'a[href="meus-artigos.html"]'
         ).forEach(function (link) {
             link.hidden = true;
         });
@@ -186,7 +186,7 @@ if (filtroTags) {
 // Carrega os artigos com base nas tags selecionadas e no autor, se fornecido.
 async function carregarArtigos(tagsSelecionadas = [], autor = "") {
     try {
-        let url = "http://127.0.0.1:8000/artigos/";
+        let url = `${window.API_BASE}/artigos/`;
         const parametros = [];
 
         if (autor.trim() !== "") {
@@ -223,7 +223,7 @@ async function carregarArtigos(tagsSelecionadas = [], autor = "") {
 
         artigosAprovados.forEach(function (artigo) {
             const elemento = document.createElement("div");
-            elemento.classList.add("artigos");
+            elemento.classList.add("artigo");
 
             const titulo = document.createElement("h2");
             titulo.className = "artigo-titulo";
@@ -325,15 +325,19 @@ if (filtroAutor) {
 async function verificarLogin() {
     const token = localStorage.getItem("token");
     const loginButtons = document.getElementById("loginButtons");
+    const finalizarVerificacao = () => {
+        document.documentElement.classList.remove("usuario-autenticando");
+    };
 
     if (!token) {
         atualizarMenuMobile(null);
+        finalizarVerificacao();
         return;
     }
 
     try {
         const resposta = await fetch(
-            "http://127.0.0.1:8000/auth/me",
+            `${window.API_BASE}/auth/me`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -344,6 +348,7 @@ async function verificarLogin() {
         if (!resposta.ok) {
             localStorage.removeItem("token");
             atualizarMenuMobile(null);
+            finalizarVerificacao();
             return;
         }
 
@@ -360,7 +365,7 @@ async function verificarLogin() {
             "template-perfil.jpg";
 
         const fotoUrl =
-            `http://127.0.0.1:8000/uploads/perfis/${encodeURIComponent(fotoUsuario)}`;
+            `${window.API_BASE}/uploads/perfis/${encodeURIComponent(fotoUsuario)}`;
 
         loginButtons.innerHTML = `
             <div class="perfil-menu">
@@ -404,6 +409,8 @@ async function verificarLogin() {
             </button>
         `;
 
+        finalizarVerificacao();
+
         // Abrir e fechar dropdown do perfil.
         const fotoPerfilNav = document.getElementById("fotoPerfilNav");
 
@@ -421,7 +428,7 @@ async function verificarLogin() {
                 if (!fotoPerfilNav.dataset.fallbackUsado) {
                     fotoPerfilNav.dataset.fallbackUsado = "true";
                     fotoPerfilNav.src =
-                        "http://127.0.0.1:8000/uploads/perfis/template-perfil.jpg";
+                        `${window.API_BASE}/uploads/perfis/template-perfil.jpg`;
                 }
             });
         }
@@ -460,6 +467,7 @@ async function verificarLogin() {
 
         // Em caso de falha na verificação, não presumimos login válido.
         atualizarMenuMobile(null);
+        finalizarVerificacao();
     }
 }
 
@@ -520,7 +528,7 @@ function mostrarNotificacao(mensagem, tipo = "sucesso") {
     // Não executa em outras páginas do site.
     if (!paginaPerfil) return;
 
-    const API = "http://127.0.0.1:8000";
+    const API = window.API_BASE;
 
     const foto = document.getElementById("perfilFoto");
     const nome = document.getElementById("perfilNome");
@@ -646,21 +654,26 @@ function mostrarNotificacao(mensagem, tipo = "sucesso") {
         const conteudo = document.createElement("div");
         conteudo.className = "meu-artigo-conteudo";
 
+        const status = artigo.status || "aprovado";
+        const publicado = status === "aprovado";
+
+        // Define o endereço correto para abrir o artigo
+        const urlArtigo = publicado
+            ? `artigo.html?id=${encodeURIComponent(artigo.idart)}`
+            : `artigo.html?id=${encodeURIComponent(artigo.idart)}&preview=1`;
+
+        // Título do artigo
         const titulo = document.createElement("h2");
         const linkTitulo = document.createElement("a");
 
-        linkTitulo.href =
-            `artigo.html?id=${encodeURIComponent(artigo.idart)}`;
-
+        linkTitulo.href = urlArtigo;
         linkTitulo.textContent =
             artigo.titulo || "Artigo sem título";
 
         titulo.appendChild(linkTitulo);
         conteudo.appendChild(titulo);
 
-        const status = artigo.status || "aprovado";
-        const publicado = status === "aprovado";
-
+        // Data
         const dataExibida = publicado
             ? (artigo.data_publicacao || artigo.data_criacao)
             : artigo.data_criacao;
@@ -725,9 +738,7 @@ function mostrarNotificacao(mensagem, tipo = "sucesso") {
             const botao = document.createElement("a");
 
             botao.className = "btn-visualizar";
-            botao.href =
-                `artigo.html?id=${encodeURIComponent(artigo.idart)}`;
-
+            botao.href = urlArtigo;
             botao.textContent = "VISUALIZAR";
 
             acoes.appendChild(botao);

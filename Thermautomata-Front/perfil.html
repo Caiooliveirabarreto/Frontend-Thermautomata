@@ -11,7 +11,7 @@
         crossorigin="anonymous"
     >
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,6 +22,15 @@
     >
 
     <title>Perfil | Thermautomata</title>
+    <script>
+        try {
+            if (localStorage.getItem("token")) {
+                document.documentElement.classList.add("usuario-autenticando");
+            }
+        } catch (erro) {
+            console.warn("Não foi possível verificar o token.");
+        }
+    </script>
 </head>
 
 <body>
@@ -33,7 +42,7 @@
                 <div class="col-4">
                     <a href="index.html" aria-label="Página inicial">
                         <img
-                            src="assets/logo.png"
+                            src="assets/images/logo.png"
                             alt="Logo"
                             class="img-fluid"
                         >
@@ -126,7 +135,7 @@
             <div class="perfil-identidade">
 
                 <img
-                    src="http://127.0.0.1:8000/uploads/perfis/template-perfil.jpg"
+                    src="${window.API_BASE}/uploads/perfis/template-perfil.jpg"
                     alt="Foto de perfil"
                     id="perfilFoto"
                     class="perfil-foto"
@@ -200,7 +209,8 @@
 
     </main>
 
-    <script src="script.js"></script>
+    <script src="assets/config.js"></script>
+    <script src="assets/script.js"></script>
 
 </body>
 </html>

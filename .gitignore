@@ -1,14 +1,26 @@
-# Ambientes Virtuais
+
+# Ambientes virtuais Python
 venv/
+.venv/
 env/
 
-# Cache do Python
-back-end/routers/__pycache__/
-*.pyc
+# Cache Python
+__pycache__/
+*.py[cod]
 
-# Arquivos de ambiente (caso usem futuramente)
+# Credenciais e variáveis de ambiente
 .env
+.env.*
+!.env.example
 
-# Testes unitários
+# Backups e exportações do banco
+/database/*.sql
+
+# Fotos enviadas pelos usuários
+/back-end/uploads/perfis/*
+!/back-end/uploads/perfis/template-perfil.jpg
+
+# Arquivos de testes
 htmlcov/
 .coverage
+.pytest_cache/
